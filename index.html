@@ -7,7 +7,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
 body{background:#f6f6f7;color:#111}
-header{background:linear-gradient(135deg,#FF0000 0%,#FF6A00 45%,#7A0000 100%);color:#fff;padding:16px 16px 12px;position:sticky;top:0;z-index:10}
+header{background:linear-gradient(135deg,#FF0000 0%,#FF6A00 45%,#7A0000 100%);color:#fff;padding:16px 16px 12px;position:relative;z-index:10}
 .top{display:flex;align-items:center;gap:12px}
 .logo{width:44px;height:44px;background:#fff;border-radius:10px;display:grid;place-items:center;font-weight:900;color:#E60000;font-size:18px;line-height:1;text-align:center}
 .logo small{display:block;font-size:7px;letter-spacing:1px;color:#7A0000}
@@ -18,7 +18,7 @@ h1 span{font-size:12px;font-weight:600;opacity:.95;display:block;margin-top:2px}
 select,input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;background:#fff;font-size:14px;color:#111}
 select{font-weight:700}
 .hint{font-size:12px;opacity:.9;margin-top:6px}
-nav{display:flex;gap:8px;overflow-x:auto;padding:12px 12px 0;background:#fff;border-bottom:1px solid #eee;position:sticky;top:106px;z-index:9}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 12px 0;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:20}
 nav button{white-space:nowrap;border:1px solid #eee;background:#f7f7f7;padding:9px 14px;border-radius:999px;font-weight:700;cursor:pointer}
 nav button.active{background:#E60000;color:#fff;border-color:#E60000}
 main{padding:14px;max-width:900px;margin:0 auto;padding-bottom:80px}
@@ -84,8 +84,8 @@ img{max-width:100%;height:auto}
 /* Bottom nav - mobile only */
 .bottom-nav{display:none}
 @media(min-width:641px){
-  nav{position:sticky;top:0;z-index:9}
-  header{position:sticky;top:0;z-index:10}
+  nav{position:sticky;top:0;z-index:20}
+  header{position:relative;z-index:10}
 }
 @media(max-width:640px){
   /* Header jadi lebih ramping & tidak makan tempat */
@@ -100,8 +100,8 @@ img{max-width:100%;height:auto}
   .hint{font-size:11px}
   /* Sembunyikan nav atas, ganti bottom nav */
   nav{display:none!important}
-  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:#fff;border-top:1px solid #eee;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.08);gap:2px}
-  .bottom-nav button{flex:1;border:0;background:transparent;padding:6px 2px 4px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;color:#666;font-size:10px;font-weight:700;line-height:1.1}
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:100;pointer-events:auto;touch-action:manipulation;background:#fff;border-top:1px solid #eee;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.08);gap:2px}
+  .bottom-nav button{flex:1;border:0;background:transparent;padding:6px 2px 4px;border-radius:10px;cursor:pointer;pointer-events:auto;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;color:#666;font-size:10px;font-weight:700;line-height:1.1}
   .bottom-nav button span.ic{font-size:20px;line-height:1}
   .bottom-nav button.active{color:#E60000;background:#FFF1F1}
   .bottom-nav button.active span.ic{transform:scale(1.05)}
@@ -189,12 +189,12 @@ img{max-width:100%;height:auto}
   </div>
 </header>
 <nav>
-  <button class="active" onclick="show('dashboard',this)">Dashboard</button>
-  <button onclick="show('audit',this)">Audit Power</button>
-  <button onclick="show('checkin',this)">Check-IN</button>
-  <button onclick="show('history',this)">History</button>
-  <button onclick="show('project',this)">Project / Tugas</button>
-  <button onclick="show('inventory',this)">Inventory</button>
+  <button class="active" data-page="dashboard" onclick="show('dashboard',this)">Dashboard</button>
+  <button data-page="audit" onclick="show('audit',this)">Audit Power</button>
+  <button data-page="checkin" onclick="show('checkin',this)">Check-IN</button>
+  <button data-page="history" onclick="show('history',this)">History</button>
+  <button data-page="project" onclick="show('project',this)">Project / Tugas</button>
+  <button data-page="inventory" onclick="show('inventory',this)">Inventory</button>
 </nav>
 <main>
 <!-- DASHBOARD -->
@@ -202,6 +202,7 @@ img{max-width:100%;height:auto}
   <div class="card">
     <h2>Dashboard</h2>
     <p class="sub">Pilih PIC di atas untuk melihat tugasmu. Tugas Aktif hanya menghitung Status <b>OPEN</b> (bukan NEW OPEN).</p>
+    <div class="row" style="margin-top:12px"><button class="btn btn-red" data-page="audit" onclick="show('audit',this)" style="width:100%">⚡ Buka Audit Power</button></div>
     <div class="links">
       <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSwB-OkKVEEGm8_HjQhyKg8K6yUlM8IaZkyRTcSVzPpxulkU1uUXUIJGhWrUC13CFv9YNCTGh-GbX3V/pubhtml" target="_blank">TIDORE DATABASE - Google Drive</a>
       <a href="#" onclick="alert('Buka Cell Down TERNATE Tracker dari link yang sudah dibagikan di grup.');return false">Cell Down TERNATE Tracker</a>
@@ -283,13 +284,196 @@ img{max-width:100%;height:auto}
     <datalist id="battGroupList"><option value="0"></option><option value="100"></option><option value="200"></option><option value="300"></option><option value="400"></option><option value="500"></option><option value="800"></option></datalist>
 
     <label>Mainpower</label>
-    <select id="mainpower"><option>PLN Normal</option><option>PLN Padam</option><option>Genset</option><option>PLN + Genset</option></select>
+    <select id="mainpower"><option>PLN</option><option>Genset Telkomsel</option><option>Genset TP</option><option>SPS Telkomsel</option><option>SPS TP</option><option>Corporate</option></select>
+    <label>Daya MainPower</label><input id="dayaMainpower" placeholder="Contoh: 11000" inputmode="decimal" autocomplete="off" oninput="cleanDaya(this)">
+    <div class="field-note">Hanya angka & titik (.). Contoh: 11000</div>
+    <label>Jumlah Phasa</label><input id="jumlahPhasa" placeholder="1 atau 3" inputmode="numeric" maxlength="1" autocomplete="off" oninput="cleanPhasa(this)" onchange="updatePhasa()">
+    <div class="field-note">Hanya boleh angka 1 atau 3. Jika ketik 1, Tegangan Antar Phasa tidak perlu tampil.</div>
+    <label>Tegangan R-S-T terhadap N</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - N</label><input id="tegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="tegSNBox"><label style="margin-top:0">S - N</label><input id="tegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="tegTNBox"><label style="margin-top:0">T - N</label><input id="tegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 220.5</div>
+    <div id="antarPhasaBox">
+    <label>Tegangan Antar Phasa</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - S</label><input id="tegRS" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">S - T</label><input id="tegST" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">T - R</label><input id="tegTR" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 380.5</div>
+    </div>
+    <label>Arus R-S-T</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">Arus R</label><input id="arusR" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="arusSBox"><label style="margin-top:0">Arus S</label><input id="arusS" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="arusTBox"><label style="margin-top:0">Arus T</label><input id="arusT" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 10.5</div>
+    <label>Tegangan G-N</label><input id="tegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
     <label>ACPDB</label>
     <select id="acpdb"><option>Normal</option><option>Trip</option><option>Rusak</option></select>
-    <label>Genset</label>
-    <select id="genset"><option>Tidak Ada</option><option>Normal</option><option>Rusak</option><option>Perlu BBM</option></select>
-    <label>Alarm ENVA</label>
-    <input id="alarm" placeholder="Contoh: Rectifier Fail, Battery Low...">
+    <label>ACPDB Tegangan R-S-T terhadap N</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - N</label><input id="acpdbTegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="acpdbTegSNBox"><label style="margin-top:0">S - N</label><input id="acpdbTegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="acpdbTegTNBox"><label style="margin-top:0">T - N</label><input id="acpdbTegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 220.5</div>
+    <div id="acpdbAntarPhasaBox">
+    <label>ACPDB Tegangan Phasa</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - S</label><input id="acpdbTegRS" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">S - T</label><input id="acpdbTegST" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">T - R</label><input id="acpdbTegTR" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 380.5</div>
+    </div>
+    <label>ACPDB Arus R-S-T</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">Arus R</label><input id="acpdbArusR" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="acpdbArusSBox"><label style="margin-top:0">Arus S</label><input id="acpdbArusS" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="acpdbArusTBox"><label style="margin-top:0">Arus T</label><input id="acpdbArusT" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 10.5</div>
+    <label>ACPDB G-N</label><input id="acpdbTegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
+    <div style="height:14px"></div>
+    <label style="margin-top:6px">Apakah ada Genset?</label>
+    <div style="display:flex;gap:24px;margin:8px 0 10px">
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="adaGenset" value="Ya" style="width:20px;height:20px;accent-color:#E60000" onchange="updateGensetAda()"> Ya</label>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="adaGenset" value="Tidak" checked style="width:20px;height:20px;accent-color:#E60000" onchange="updateGensetAda()"> Tidak</label>
+    </div>
+    <div id="gensetDetailWrap" style="display:none">
+    <label>Jumlah Genset</label>
+    <div style="display:flex;gap:16px;margin:8px 0 10px">
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="jumlahGenset" value="1" checked style="width:20px;height:20px;accent-color:#E60000" onchange="updateGensetCount()"> 1</label>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="jumlahGenset" value="2" style="width:20px;height:20px;accent-color:#E60000" onchange="updateGensetCount()"> 2</label>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="jumlahGenset" value="3" style="width:20px;height:20px;accent-color:#E60000" onchange="updateGensetCount()"> 3</label>
+    </div>
+    <div id="genset1Box">
+    <div style="font-weight:700;margin:14px 0 6px;padding:8px 10px;background:#FFF3F3;border-left:4px solid #E60000;border-radius:6px">GENSET #1</div>
+    <label>GENSET #1 Jenis/Tipe/Merek</label><input id="genset1Jenis" placeholder="Contoh: Perkins / Cummins / Deutz">
+    <label>GENSET #1 Kapasitas (kVA)</label><input id="genset1Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
+    <label>GENSET #1 Kondisi</label><select id="genset1Kondisi"><option>Normal</option><option>Rusak</option></select>
+    <label>GENSET #1 Tegangan Phase-N</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - N</label><input id="genset1TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset1TegSNBox"><label style="margin-top:0">S - N</label><input id="genset1TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset1TegTNBox"><label style="margin-top:0">T - N</label><input id="genset1TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 220.5</div>
+    <div id="genset1AntarPhasaBox">
+    <label>GENSET #1 Tegangan Phase-Phase</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - S</label><input id="genset1TegRS" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">S - T</label><input id="genset1TegST" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">T - R</label><input id="genset1TegTR" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 380.5</div>
+    </div>
+    <label>GENSET #1 G-N Panel ATS</label><input id="genset1TegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
+    <label>GENSET #1 Running Mode</label><select id="genset1Running"><option>Auto</option><option>Manual</option></select>
+    <label>GENSET #1 Kerusakan/ATS</label><input id="genset1Kerusakan" placeholder="Contoh: ATS Trip / Genset tidak bisa start / -">
+    </div>
+    <div id="genset2Box" style="display:none">
+    <div style="font-weight:700;margin:14px 0 6px;padding:8px 10px;background:#FFF3F3;border-left:4px solid #E60000;border-radius:6px">GENSET #2</div>
+    <label>GENSET #2 Jenis/Tipe/Merek</label><input id="genset2Jenis" placeholder="Contoh: Perkins / Cummins / Deutz">
+    <label>GENSET #2 Kapasitas (kVA)</label><input id="genset2Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
+    <label>GENSET #2 Kondisi</label><select id="genset2Kondisi"><option>Normal</option><option>Rusak</option></select>
+    <label>GENSET #2 Tegangan Phase-N</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - N</label><input id="genset2TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset2TegSNBox"><label style="margin-top:0">S - N</label><input id="genset2TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset2TegTNBox"><label style="margin-top:0">T - N</label><input id="genset2TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 220.5</div>
+    <div id="genset2AntarPhasaBox">
+    <label>GENSET #2 Tegangan Phase-Phase</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - S</label><input id="genset2TegRS" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">S - T</label><input id="genset2TegST" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">T - R</label><input id="genset2TegTR" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 380.5</div>
+    </div>
+    <label>GENSET #2 G-N Panel ATS</label><input id="genset2TegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
+    <label>GENSET #2 Running Mode</label><select id="genset2Running"><option>Auto</option><option>Manual</option></select>
+    <label>GENSET #2 Kerusakan/ATS</label><input id="genset2Kerusakan" placeholder="Contoh: ATS Trip / Genset tidak bisa start / -">
+    </div>
+    <div id="genset3Box" style="display:none">
+    <div style="font-weight:700;margin:14px 0 6px;padding:8px 10px;background:#FFF3F3;border-left:4px solid #E60000;border-radius:6px">GENSET #3</div>
+    <label>GENSET #3 Jenis/Tipe/Merek</label><input id="genset3Jenis" placeholder="Contoh: Perkins / Cummins / Deutz">
+    <label>GENSET #3 Kapasitas (kVA)</label><input id="genset3Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
+    <label>GENSET #3 Kondisi</label><select id="genset3Kondisi"><option>Normal</option><option>Rusak</option></select>
+    <label>GENSET #3 Tegangan Phase-N</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - N</label><input id="genset3TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset3TegSNBox"><label style="margin-top:0">S - N</label><input id="genset3TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div id="genset3TegTNBox"><label style="margin-top:0">T - N</label><input id="genset3TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 220.5</div>
+    <div id="genset3AntarPhasaBox">
+    <label>GENSET #3 Tegangan Phase-Phase</label>
+    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+      <div><label style="margin-top:0">R - S</label><input id="genset3TegRS" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">S - T</label><input id="genset3TegST" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      <div><label style="margin-top:0">T - R</label><input id="genset3TegTR" placeholder="380" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+    </div>
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 380.5</div>
+    </div>
+    <label>GENSET #3 G-N Panel ATS</label><input id="genset3TegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
+    <label>GENSET #3 Running Mode</label><select id="genset3Running"><option>Auto</option><option>Manual</option></select>
+    <label>GENSET #3 Kerusakan/ATS</label><input id="genset3Kerusakan" placeholder="Contoh: ATS Trip / Genset tidak bisa start / -">
+    </div>
+    </div>
+    <div style="height:14px"></div>
+    <label>Ada SPS</label>
+    <div style="display:flex;gap:24px;margin:8px 0 10px">
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="adaSps" value="Ada" style="width:20px;height:20px;accent-color:#E60000" onchange="updateSps()"> Ada</label>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:600"><input type="radio" name="adaSps" value="Tidak" checked style="width:20px;height:20px;accent-color:#E60000" onchange="updateSps()"> Tidak</label>
+    </div>
+    <div id="spsDetailBox" style="display:none">
+    <label>SPS Daya Per-Panel (wP)</label><input id="spsDayaPerPanel" placeholder="Contoh: 550" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 550</div>
+    <label>SPS Jumlah Panel Keseluruhan</label><input id="spsJumlahPanel" placeholder="Contoh: 12" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka. Contoh: 12</div>
+    <label>SPS Panel Bagus</label><input id="spsPanelBagus" placeholder="Contoh: 10" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka. Contoh: 10</div>
+    <label>SPS Panel Rusak</label><input id="spsPanelRusak" placeholder="Contoh: 2" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
+    <div class="field-note">Hanya angka. Contoh: 2</div>
+    <label>SPS Konektor Karatan</label><select id="spsKonektor"><option value="">-- Pilih --</option><option>Tidak Ada</option><option>Ada</option></select>
+    <label>SPS Tegangan Output Phase-N (VDC)</label><input id="spsTegOutput" placeholder="Contoh: -48.5" inputmode="text" maxlength="6" autocomplete="off" oninput="cleanSpsVdc(this)">
+    <div class="field-note">Hanya angka dan tanda -. Contoh: -48.5</div>
+    <label>SPS Tegangan G-N (V)</label><input id="spsTegGN" placeholder="0.5" inputmode="decimal" maxlength="4" autocomplete="off" oninput="cleanGN(this)">
+    <div class="field-note">Hanya angka & titik (.), maks 4 karakter. Contoh: 0.5</div>
+    <label>SPS Owner</label><select id="spsOwner"><option value="">-- Pilih Owner --</option><option>Telkomsel</option><option>TP</option><option>Corporate</option><option>Lainnya</option></select>
+    </div>
+    <label style="margin-top:10px;font-style:italic">Alarm Enval Valid</label>
+    <div class="field-note" style="font-style:italic">Centang Jika Valid</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:8px 0 10px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmMainFail" style="width:20px;height:20px;accent-color:#E60000"> Main Fail</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmRectiFail" style="width:20px;height:20px;accent-color:#E60000"> Recti Fail</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmLowBatt" style="width:20px;height:20px;accent-color:#E60000"> Low Batt</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmHighTemp" style="width:20px;height:20px;accent-color:#E60000"> High Temp</label>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmBattStolen" style="width:20px;height:20px;accent-color:#E60000"> Batt Stolen</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmDoorRecti" style="width:20px;height:20px;accent-color:#E60000"> Door Open Recti</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmDoorBTS" style="width:20px;height:20px;accent-color:#E60000"> Door Open BTS</label>
+        <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500;min-height:44px"><input type="checkbox" id="alarmGensetRunning" style="width:20px;height:20px;accent-color:#E60000"> Genset Running</label>
+      </div>
+    </div>
     <label>Catatan / Root Cause / Action Plan</label>
     <textarea id="catatan" rows="3" placeholder="Tulis root cause & action plan..."></textarea>
 
@@ -364,12 +548,12 @@ img{max-width:100%;height:auto}
 
 <!-- BOTTOM NAV - Mobile Friendly -->
 <div class="bottom-nav" id="bottomNav">
-  <button class="active" onclick="show('dashboard',this)"><span class="ic">🏠</span>Dashboard</button>
-  <button onclick="show('audit',this)"><span class="ic">⚡</span>Audit Power</button>
-  <button onclick="show('checkin',this)"><span class="ic">📍</span>Check-IN</button>
-  <button onclick="show('history',this)"><span class="ic">🕘</span>History</button>
-  <button onclick="show('project',this)"><span class="ic">📋</span>Project</button>
-  <button onclick="show('inventory',this)"><span class="ic">📦</span>Inventory</button>
+  <button class="active" data-page="dashboard" onclick="show('dashboard',this)"><span class="ic">🏠</span>Dashboard</button>
+  <button data-page="audit" onclick="show('audit',this)"><span class="ic">⚡</span>Audit Power</button>
+  <button data-page="checkin" onclick="show('checkin',this)"><span class="ic">📍</span>Check-IN</button>
+  <button data-page="history" onclick="show('history',this)"><span class="ic">🕘</span>History</button>
+  <button data-page="project" onclick="show('project',this)"><span class="ic">📋</span>Project</button>
+  <button data-page="inventory" onclick="show('inventory',this)"><span class="ic">📦</span>Inventory</button>
 </div>
 <script>
 const APPS_URL_DEFAULT="https://script.google.com/macros/s/AKfycbwC5r8mbWUtQzHnvN-DynApQFm2hZCqTtKWvOEVx70WwPZ8F_ws2r_aoDyj7WwQMGdI/exec";
@@ -392,11 +576,12 @@ let tasks=[
 {siteId:"TER001",siteName:"TERNATE 1",siteClass:"Gold",pic:"Cezz & Rizal",root:"Cell down",action:"Check transmission & power",target:"2026-11-27",kab:"KOTA TERNATE",priority:"High",blocking:"Akses site",status:"OPEN"},
 ];
 let taskFilter="OPEN";
-let audits=JSON.parse(localStorage.getItem("moti_audits")||"[]");
-let checkins=JSON.parse(localStorage.getItem("moti_checkins")||"[]");
-let invs=JSON.parse(localStorage.getItem("moti_invs")||"[]");
+function loadLS(k){try{var v=JSON.parse(localStorage.getItem(k)||"[]");return Array.isArray(v)?v:[]}catch(e){return []}}
+let audits=loadLS("moti_audits");
+let checkins=loadLS("moti_checkins");
+let invs=loadLS("moti_invs");
 
-function show(id,btn){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");var map={dashboard:0,audit:1,checkin:2,history:3,project:4,inventory:5};var idx=map[id];if(idx!=null){var topBtn=document.querySelectorAll("nav button")[idx];if(topBtn)topBtn.classList.add("active");var botBtn=document.querySelectorAll(".bottom-nav button")[idx];if(botBtn)botBtn.classList.add("active");}if(id==="history"||id==="audit")renderHistory("");if(id==="project")renderTasks();if(id==="inventory")renderInv();if(id==="checkin")renderCheckin();window.scrollTo({top:0,behavior:"smooth"});}
+function show(id,btn){try{var sec=document.getElementById(id);if(!sec)return;document.querySelectorAll("main section").forEach(function(s){s.classList.add("hidden")});sec.classList.remove("hidden");document.querySelectorAll("nav button").forEach(function(b){b.classList.remove("active")});document.querySelectorAll(".bottom-nav button").forEach(function(b){b.classList.remove("active")});if(btn)btn.classList.add("active");var map={dashboard:0,audit:1,checkin:2,history:3,project:4,inventory:5};var idx=map[id];if(idx!=null){var topBtn=document.querySelectorAll("nav button")[idx];if(topBtn)topBtn.classList.add("active");var botBtn=document.querySelectorAll(".bottom-nav button")[idx];if(botBtn)botBtn.classList.add("active");}try{if(id==="history"||id==="audit")renderHistory("")}catch(e){}try{if(id==="project")renderTasks()}catch(e){}try{if(id==="inventory")renderInv()}catch(e){}try{if(id==="checkin")renderCheckin()}catch(e){}try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){window.scrollTo(0,0)}}catch(e){try{var f=document.getElementById(id);if(f){document.querySelectorAll("main section").forEach(function(s){s.classList.add("hidden")});f.classList.remove("hidden");window.scrollTo(0,0)}}catch(e2){}}}
 function onPicChange(){let p=document.getElementById("pic").value;document.getElementById("picHint").textContent="Menampilkan tugas untuk: "+p+" • "+(p==="Semua / Admin"?"semua tugas OPEN":"tugas OPEN untuk "+p);document.getElementById("inputBy").value=p;document.getElementById("aPicName").textContent=p;document.getElementById("warnPic").classList.toggle("hidden",p!=="Semua / Admin");renderTasks();updateStats();}
 function picMatch(taskPic,selected){if(selected==="Semua / Admin")return true;let parts=taskPic.split(/[\/,&]/).map(s=>s.trim().toLowerCase());return parts.some(x=>x===selected.toLowerCase()||selected.toLowerCase().includes(x)||x.includes(selected.toLowerCase()));}
 function filteredTasks(){let p=document.getElementById("pic").value;let list=tasks.filter(t=>picMatch(t.pic,p));if(taskFilter==="OPEN")list=list.filter(t=>t.status==="OPEN");if(taskFilter==="DONE")list=list.filter(t=>t.status==="DONE");let q=(document.getElementById("taskSearch")?.value||"").toLowerCase();if(q)list=list.filter(t=>(t.siteId+" "+t.siteName+" "+t.pic+" "+t.action).toLowerCase().includes(q));return list;}
@@ -412,6 +597,15 @@ function onSiteId(){let id=document.getElementById("siteId").value.trim().toUppe
 
 
 function cleanDC(el){el.value=el.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1').slice(0,5);}
+function cleanDaya(el){el.value=el.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1').slice(0,10);}
+function cleanGN(el){el.value=el.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1').slice(0,4);}
+function cleanSpsVdc(el){var v=(el.value||'').replace(/[^0-9.\-]/g,'');var neg=v.charAt(0)==='-';v=v.replace(/-/g,'');var parts=v.split('.');v=parts[0]+(parts.length>1?'.'+parts.slice(1).join(''):'');if(neg)v='-'+v;el.value=v.slice(0,6);}
+function updateSps(){var ada=(document.querySelector('input[name="adaSps"]:checked')?.value||'Tidak')==='Ada';var box=document.getElementById('spsDetailBox');if(box)box.style.display=ada?'':'none';if(!ada){['spsDayaPerPanel','spsJumlahPanel','spsPanelBagus','spsPanelRusak','spsKonektor','spsTegOutput','spsTegGN','spsOwner'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}}
+function updateGensetAda(){var ada=(document.querySelector('input[name="adaGenset"]:checked')?.value||'Tidak')==='Ya';var wrap=document.getElementById('gensetDetailWrap');if(wrap)wrap.style.display=ada?'':'none';if(!ada){[1,2,3].forEach(function(n){var box=document.getElementById('genset'+n+'Box');if(box)box.style.display='none';['genset'+n+'Jenis','genset'+n+'Kapasitas','genset'+n+'TegRN','genset'+n+'TegSN','genset'+n+'TegTN','genset'+n+'TegRS','genset'+n+'TegST','genset'+n+'TegTR','genset'+n+'TegGN','genset'+n+'Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});});}else{updateGensetCount();}}
+function updateGensetCount(){var adaG=(document.querySelector('input[name="adaGenset"]:checked')?.value||'Tidak')==='Ya';var c=parseInt((document.querySelector('input[name="jumlahGenset"]:checked')?.value||'1'),10);if(isNaN(c))c=1;if(!adaG)c=0;[1,2,3].forEach(function(n){var box=document.getElementById('genset'+n+'Box');if(!box)return;var show=n<=c;box.style.display=show?'':'none';if(!show){['genset'+n+'Jenis','genset'+n+'Kapasitas','genset'+n+'Kondisi','genset'+n+'TegRN','genset'+n+'TegSN','genset'+n+'TegTN','genset'+n+'TegRS','genset'+n+'TegST','genset'+n+'TegTR','genset'+n+'TegGN','genset'+n+'Running','genset'+n+'Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=(id==='genset'+n+'Kondisi'?'Normal':(id==='genset'+n+'Running'?'Auto':''));});}});updatePhasa();}
+function cleanPhasa(el){el.value=(el.value||'').replace(/[^0-9]/g,'').slice(0,1);if(el.value!==''&&el.value!=='1'&&el.value!=='3'){el.value='';}updatePhasa();}
+function updatePhasa(){var v=document.getElementById('jumlahPhasa')?.value||'';var is1=(v==='1');var box=document.getElementById('antarPhasaBox');if(box)box.style.display=is1?'none':'';['tegSNBox','tegTNBox','arusSBox','arusTBox','acpdbTegSNBox','acpdbTegTNBox','acpdbArusSBox','acpdbArusTBox','genset1TegSNBox','genset1TegTNBox','genset2TegSNBox','genset2TegTNBox','genset3TegSNBox','genset3TegTNBox'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display=is1?'none':'';});var ab=document.getElementById('acpdbAntarPhasaBox');if(ab)ab.style.display=is1?'none':'';['genset1AntarPhasaBox','genset2AntarPhasaBox','genset3AntarPhasaBox'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display=is1?'none':'';});if(is1){['tegSN','tegTN','tegRS','tegST','tegTR','arusS','arusT','acpdbTegSN','acpdbTegTN','acpdbTegRS','acpdbTegST','acpdbTegTR','acpdbArusS','acpdbArusT','genset1TegSN','genset1TegTN','genset1TegRS','genset1TegST','genset1TegTR','genset2TegSN','genset2TegTN','genset2TegRS','genset2TegST','genset2TegTR','genset3TegSN','genset3TegTN','genset3TegRS','genset3TegST','genset3TegTR'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}}
+function cleanModul(el){el.value=(el.value||"").replace(/[^0-9]/g,"").slice(0,1);el.style.borderColor="#ddd";}
 function validateBattGroup(el){
   var allowed=["0","100","200","300","400","500","800"];
   var v=(el.value||"").trim();
@@ -446,6 +640,7 @@ function renderRect(){
   box.innerHTML="";
   for(let i=1;i<=n;i++){
     box.innerHTML+=`<div class="rect"><h3>Rectifier ${i}</h3>
+      <label>Tipe Rectifier - Rectifier ${i}</label><select id="rect${i}Type"><option value="">-- Pilih Tipe Rectifier --</option><option>ZXD2000</option><option>ZXD3000</option><option>Hariff 2G</option><option>Hariff 3G</option><option>Huawei SPS</option><option>FH SPS</option><option>Other</option></select>
       <label>DC Voltage (V)</label><input id="rect${i}Volt" placeholder="54.5" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"><div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 54.5</div>
       <label>Load Current (A)</label><input id="rect${i}Amp" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"><div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 10.5</div>
       <label>Jenis Baterai - OK (bisa gabung sampai 3 jenis) - Rectifier ${i}</label>
@@ -464,6 +659,23 @@ function renderRect(){
         <div><label style="margin-top:0">Group 4</label><input id="battGroup${i}_4" placeholder="0" inputmode="numeric" autocomplete="off" list="battGroupList" oninput="validateBattGroup(this)" onchange="validateBattGroup(this)"></div>
       </div>
       <div class="field-note batt-group-note">Hanya boleh: 0, 100, 200, 300, 400, 500, 800. Selain itu tidak bisa disimpan.</div>
+      <label>Jumlah Modul Rectifier - Rectifier ${i}</label>
+      <div class="grid2" style="gap:8px">
+        <div><label style="margin-top:0">Jumlah OK</label><input id="rect${i}ModulOk" placeholder="0" inputmode="numeric" maxlength="1" autocomplete="off" oninput="cleanModul(this)"></div>
+        <div><label style="margin-top:0">Jumlah NOK</label><input id="rect${i}ModulNok" placeholder="0" inputmode="numeric" maxlength="1" autocomplete="off" oninput="cleanModul(this)"></div>
+      </div>
+      <div class="field-note">Hanya angka 1 digit (0-9). Contoh: 3</div>
+      <label>Rectifier Work Mode - Rectifier ${i}</label><select id="rect${i}WorkMode"><option value="">-- Pilih Work Mode --</option><option>Free</option><option>Safe</option><option>Save</option></select>
+      <label>LVD Voltage - Rectifier ${i}</label>
+      <div class="grid2" style="gap:8px">
+        <div><label style="margin-top:0">LVD Voltage Prio</label><input id="rect${i}LvdPrio" placeholder="47.5" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+        <div><label style="margin-top:0">LVD Voltage Non Prio</label><input id="rect${i}LvdNonPrio" placeholder="47.5" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
+      </div>
+      <div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 47.5</div>
+      <label>Perangkat di LVD Prio - Rectifier ${i}</label><input id="rect${i}PerangkatPrio" placeholder="Contoh : BBU, 2x IPaso, ONT, dll" autocomplete="off">
+      <div class="field-note">Contoh : BBU, 2x IPaso, ONT, dll</div>
+      <label>Perangkat di LVD Non Prio - Rectifier ${i}</label><input id="rect${i}PerangkatNonPrio" placeholder="Jika tidak ada, tidak perlu diisi" autocomplete="off">
+      <div class="field-note">Jika tidak ada, tidak perlu diisi</div>
     </div>`;
   }
   // init 1 baris baterai per rectifier per kategori
@@ -488,14 +700,34 @@ function updateBattSum(){
   let gNok=document.getElementById("sumNok"); if(gNok && !document.getElementById("sumNok1")) gNok.textContent="NOK: "+battSummary("battNok");
   updateRowPreview();
 }
-function updateRowPreview(){let d=collectAudit(false);let el=document.getElementById("rowPreview"); if(el) el.textContent=[d.tanggal,d.siteId,d.siteName,d.siteClass,d.cluster,d.kab,d.inputBy,"Rect:"+d.rectCount,"R1 OK:"+d.rect1?.jenisBattOK+" (Total "+d.rect1?.battOKTotal+")","R1 NOK:"+d.rect1?.jenisBattNOK+" (Total "+d.rect1?.battNOKTotal+")",d.mainpower,d.acpdb,d.genset,d.alarm,d.catatan].join(" | ");}
+function updateRowPreview(){let d=collectAudit(false);let el=document.getElementById("rowPreview"); if(el) el.textContent=[d.tanggal,d.siteId,d.siteName,d.siteClass,d.cluster,d.kab,d.inputBy,"Rect:"+d.rectCount,"R1 Tipe:"+d.rect1?.tipeRectifier,"R1 Work Mode:"+d.rect1?.workMode,"R1 LVD Prio:"+d.rect1?.lvdPrio+" Non Prio:"+d.rect1?.lvdNonPrio,"R1 Perangkat Prio:"+d.rect1?.perangkatPrio,"R1 Perangkat Non Prio:"+d.rect1?.perangkatNonPrio,"R1 Modul OK:"+d.rect1?.modulOK+" NOK:"+d.rect1?.modulNOK,"R1 OK:"+d.rect1?.jenisBattOK+" (Total "+d.rect1?.battOKTotal+")","R1 NOK:"+d.rect1?.jenisBattNOK+" (Total "+d.rect1?.battNOKTotal+")",d.mainpower,"Daya:"+d.dayaMainpower,"Phasa:"+d.jumlahPhasa,"R-S-T/N:"+d.teganganRSTterhadapN,"AntarPhasa:"+d.teganganAntarPhasa,"ArusRST:"+d.arusRST,"G-N:"+d.tegGN,"ACPDB R-S-T/N:"+d.acpdbTeganganRSTterhadapN,"ACPDB Phasa:"+d.acpdbTeganganPhasa,"ACPDB ArusRST:"+d.acpdbArusRST,"ACPDB G-N:"+d.acpdbTegGN,"Apakah ada Genset?:"+d.adaGenset,"Jumlah Genset:"+d.jumlahGenset,"GENSET #1:"+d.genset1Jenis+" "+d.genset1Kapasitas+"kVA "+d.genset1Kondisi+" Phase-N:"+d.genset1TeganganPhaseN+" Phase-Phase:"+d.genset1TeganganPhasePhase+" G-N ATS:"+d.genset1TegGN+" "+d.genset1RunningMode+" "+d.genset1Kerusakan,"GENSET #2:"+d.genset2Jenis+" "+d.genset2Kapasitas+"kVA "+d.genset2Kondisi+" Phase-N:"+d.genset2TeganganPhaseN+" Phase-Phase:"+d.genset2TeganganPhasePhase+" G-N ATS:"+d.genset2TegGN+" "+d.genset2RunningMode+" "+d.genset2Kerusakan,"GENSET #3:"+d.genset3Jenis+" "+d.genset3Kapasitas+"kVA "+d.genset3Kondisi+" Phase-N:"+d.genset3TeganganPhaseN+" Phase-Phase:"+d.genset3TeganganPhasePhase+" G-N ATS:"+d.genset3TegGN+" "+d.genset3RunningMode+" "+d.genset3Kerusakan,"Ada SPS:"+d.adaSps,"SPS Daya/Panel:"+d.spsDayaPerPanel,"SPS Panel:"+d.spsJumlahPanel+" Bagus:"+d.spsPanelBagus+" Rusak:"+d.spsPanelRusak,"SPS Konektor:"+d.spsKonektorKaratan,"SPS Out:"+d.spsTegOutput,"SPS G-N:"+d.spsTegGN,"SPS Owner:"+d.spsOwner,d.acpdb,d.genset,d.alarm,"Alarm Enval Valid:"+d.alarmChecklist,"Main Fail:"+d.alarmMainFail,"Recti Fail:"+d.alarmRectiFail,"Low Batt:"+d.alarmLowBatt,"High Temp:"+d.alarmHighTemp,"Batt Stolen:"+d.alarmBattStolen,"Door Open Recti:"+d.alarmDoorRecti,"Door Open BTS:"+d.alarmDoorBTS,"Genset Running:"+d.alarmGensetRunning,d.catatan].join(" | ");}
 function collectAudit(withDate){
   let now=new Date();let tanggal=now.toISOString().slice(0,10)+" "+now.toTimeString().slice(0,8);
   let n=+document.getElementById("rectCount").value;
   function rectData(i){
     return {
+      tipeRectifier: document.getElementById("rect"+i+"Type")?.value||"",
+      rectifierType: document.getElementById("rect"+i+"Type")?.value||"",
+      tipe: document.getElementById("rect"+i+"Type")?.value||"",
+      perangkatPrio: document.getElementById("rect"+i+"PerangkatPrio")?.value||"",
+      perangkatNonPrio: document.getElementById("rect"+i+"PerangkatNonPrio")?.value||"",
+      perangkatLvdPrio: document.getElementById("rect"+i+"PerangkatPrio")?.value||"",
+      perangkatLvdNonPrio: document.getElementById("rect"+i+"PerangkatNonPrio")?.value||"",
+      lvdPrio: document.getElementById("rect"+i+"LvdPrio")?.value||"",
+      lvdNonPrio: document.getElementById("rect"+i+"LvdNonPrio")?.value||"",
+      lvdVoltagePrio: document.getElementById("rect"+i+"LvdPrio")?.value||"",
+      lvdVoltageNonPrio: document.getElementById("rect"+i+"LvdNonPrio")?.value||"",
+      workMode: document.getElementById("rect"+i+"WorkMode")?.value||"",
+      rectifierWorkMode: document.getElementById("rect"+i+"WorkMode")?.value||"",
+      workModeRectifier: document.getElementById("rect"+i+"WorkMode")?.value||"",
       busVoltage: document.getElementById("rect"+i+"Volt")?.value||"",
       loadCurrent: document.getElementById("rect"+i+"Amp")?.value||"",
+      modulOK: document.getElementById("rect"+i+"ModulOk")?.value||"",
+      modulNOK: document.getElementById("rect"+i+"ModulNok")?.value||"",
+      modulOk: document.getElementById("rect"+i+"ModulOk")?.value||"",
+      modulNok: document.getElementById("rect"+i+"ModulNok")?.value||"",
+      jumlahModulOK: document.getElementById("rect"+i+"ModulOk")?.value||"",
+      jumlahModulNOK: document.getElementById("rect"+i+"ModulNok")?.value||"",
       jenisBattOK: battSummary("battOk"+i),
       jenisBattNOK: battSummary("battNok"+i),
       battOKTotal: battTotal("battOk"+i),
@@ -516,19 +748,19 @@ function collectAudit(withDate){
   let allNok=[r1.jenisBattNOK, r2.jenisBattNOK||"", r3.jenisBattNOK||""].filter(x=>x && x!=="-").join(" | ");
   let totalOk=(r1.battOKTotal||0)+(r2.battOKTotal||0)+(r3.battOKTotal||0);
   let totalNok=(r1.battNOKTotal||0)+(r2.battNOKTotal||0)+(r3.battNOKTotal||0);
-  return{tanggal: withDate? tanggal: new Date().toISOString().slice(0,10), siteId:document.getElementById("siteId").value.trim().toUpperCase(), siteName:document.getElementById("siteName").value, siteClass:document.getElementById("siteClass").value, class_:document.getElementById("siteClass").value, cluster:document.getElementById("cluster").value, kab:document.getElementById("kab").value, kabupaten:document.getElementById("kab").value, oba:document.getElementById("oba").value, inputBy:document.getElementById("pic").value, rectCount:document.getElementById("rectCount").value, jumlahRectifier:document.getElementById("rectCount").value, battOk: allOk||"-", battNok: allNok||"-", battOkTotal: totalOk, battNokTotal: totalNok, rect1BattOK: r1.battOKTotal, rect1BattNOK: r1.battNOKTotal, rect2BattOK: r2.battOKTotal||0, rect2BattNOK: r2.battNOKTotal||0, rect3BattOK: r3.battOKTotal||0, rect3BattNOK: r3.battNOKTotal||0, batteryGroupConfig: r1.batteryGroupConfig, battGroup1: r1.battGroup1, battGroup2: r1.battGroup2, battGroup3: r1.battGroup3, battGroup4: r1.battGroup4, rect1: r1, rect2: r2, rect3: r3, mainpower:document.getElementById("mainpower").value, acpdb:document.getElementById("acpdb").value, genset:document.getElementById("genset").value, alarm:document.getElementById("alarm").value, catatan:document.getElementById("catatan").value, fotoSebelum:document.getElementById("fotoSebelum").value, fotoProgress:document.getElementById("fotoProgress").value, fotoSesudah:document.getElementById("fotoSesudah").value};
+  return{tanggal: withDate? tanggal: new Date().toISOString().slice(0,10), siteId:document.getElementById("siteId").value.trim().toUpperCase(), siteName:document.getElementById("siteName").value, siteClass:document.getElementById("siteClass").value, class_:document.getElementById("siteClass").value, cluster:document.getElementById("cluster").value, kab:document.getElementById("kab").value, kabupaten:document.getElementById("kab").value, oba:document.getElementById("oba").value, inputBy:document.getElementById("pic").value, rectCount:document.getElementById("rectCount").value, jumlahRectifier:document.getElementById("rectCount").value, battOk: allOk||"-", battNok: allNok||"-", battOkTotal: totalOk, battNokTotal: totalNok, rect1Tipe: r1.tipeRectifier, rect1TipeRectifier: r1.tipeRectifier, rect1Type: r1.tipeRectifier, rect2Tipe: r2.tipeRectifier||"", rect2TipeRectifier: r2.tipeRectifier||"", rect2Type: r2.tipeRectifier||"", rect3Tipe: r3.tipeRectifier||"", rect3TipeRectifier: r3.tipeRectifier||"", rect3Type: r3.tipeRectifier||"", tipeRectifier: r1.tipeRectifier, rectifierType: r1.tipeRectifier, rect1PerangkatPrio: r1.perangkatPrio, rect1PerangkatLvdPrio: r1.perangkatPrio, rect1PerangkatNonPrio: r1.perangkatNonPrio, rect1PerangkatLvdNonPrio: r1.perangkatNonPrio, rect2PerangkatPrio: r2.perangkatPrio||"", rect2PerangkatLvdPrio: r2.perangkatPrio||"", rect2PerangkatNonPrio: r2.perangkatNonPrio||"", rect2PerangkatLvdNonPrio: r2.perangkatNonPrio||"", rect3PerangkatPrio: r3.perangkatPrio||"", rect3PerangkatLvdPrio: r3.perangkatPrio||"", rect3PerangkatNonPrio: r3.perangkatNonPrio||"", rect3PerangkatLvdNonPrio: r3.perangkatNonPrio||"", perangkatPrio: r1.perangkatPrio, perangkatNonPrio: r1.perangkatNonPrio, perangkatLvdPrio: r1.perangkatPrio, perangkatLvdNonPrio: r1.perangkatNonPrio, rect1LvdPrio: r1.lvdPrio, rect1LvdVoltagePrio: r1.lvdPrio, rect1LvdNonPrio: r1.lvdNonPrio, rect1LvdVoltageNonPrio: r1.lvdNonPrio, rect2LvdPrio: r2.lvdPrio||"", rect2LvdVoltagePrio: r2.lvdPrio||"", rect2LvdNonPrio: r2.lvdNonPrio||"", rect2LvdVoltageNonPrio: r2.lvdNonPrio||"", rect3LvdPrio: r3.lvdPrio||"", rect3LvdVoltagePrio: r3.lvdPrio||"", rect3LvdNonPrio: r3.lvdNonPrio||"", rect3LvdVoltageNonPrio: r3.lvdNonPrio||"", lvdPrio: r1.lvdPrio, lvdNonPrio: r1.lvdNonPrio, lvdVoltagePrio: r1.lvdPrio, lvdVoltageNonPrio: r1.lvdNonPrio, rect1WorkMode: r1.workMode, rect1RectifierWorkMode: r1.workMode, rect2WorkMode: r2.workMode||"", rect2RectifierWorkMode: r2.workMode||"", rect3WorkMode: r3.workMode||"", rect3RectifierWorkMode: r3.workMode||"", workMode: r1.workMode, rectifierWorkMode: r1.workMode, rect1ModulOK: r1.modulOK, rect1ModulNOK: r1.modulNOK, rect2ModulOK: r2.modulOK||"", rect2ModulNOK: r2.modulNOK||"", rect3ModulOK: r3.modulOK||"", rect3ModulNOK: r3.modulNOK||"", rect1ModulOk: r1.modulOK, rect1ModulNok: r1.modulNOK, modulOK: r1.modulOK, modulNOK: r1.modulNOK, jumlahModulOK: r1.modulOK, jumlahModulNOK: r1.modulNOK, rect1BattOK: r1.battOKTotal, rect1BattNOK: r1.battNOKTotal, rect2BattOK: r2.battOKTotal||0, rect2BattNOK: r2.battNOKTotal||0, rect3BattOK: r3.battOKTotal||0, rect3BattNOK: r3.battNOKTotal||0, batteryGroupConfig: r1.batteryGroupConfig, battGroup1: r1.battGroup1, battGroup2: r1.battGroup2, battGroup3: r1.battGroup3, battGroup4: r1.battGroup4, rect1: r1, rect2: r2, rect3: r3, mainpower:document.getElementById("mainpower").value, dayaMainpower:document.getElementById("dayaMainpower")?.value||"", daya:document.getElementById("dayaMainpower")?.value||"", jumlahPhasa:document.getElementById("jumlahPhasa")?.value||"", phasa:document.getElementById("jumlahPhasa")?.value||"", tegRN:document.getElementById("tegRN")?.value||"", tegSN:document.getElementById("tegSN")?.value||"", tegTN:document.getElementById("tegTN")?.value||"", teganganRN:document.getElementById("tegRN")?.value||"", teganganSN:document.getElementById("tegSN")?.value||"", teganganTN:document.getElementById("tegTN")?.value||"", teganganRSTterhadapN:((document.getElementById("tegRN")?.value||"")+" / "+(document.getElementById("tegSN")?.value||"")+" / "+(document.getElementById("tegTN")?.value||"")), tegRS:document.getElementById("tegRS")?.value||"", tegST:document.getElementById("tegST")?.value||"", tegTR:document.getElementById("tegTR")?.value||"", teganganRS:document.getElementById("tegRS")?.value||"", teganganST:document.getElementById("tegST")?.value||"", teganganTR:document.getElementById("tegTR")?.value||"", teganganAntarPhasa:((document.getElementById("tegRS")?.value||"")+" / "+(document.getElementById("tegST")?.value||"")+" / "+(document.getElementById("tegTR")?.value||"")), arusR:document.getElementById("arusR")?.value||"", arusS:document.getElementById("arusS")?.value||"", arusT:document.getElementById("arusT")?.value||"", arusRST:((document.getElementById("arusR")?.value||"")+" / "+(document.getElementById("arusS")?.value||"")+" / "+(document.getElementById("arusT")?.value||"")), tegGN:document.getElementById("tegGN")?.value||"", teganganGN:document.getElementById("tegGN")?.value||"", teganganG_N:document.getElementById("tegGN")?.value||"", acpdb:document.getElementById("acpdb").value, acpdbTegRN:document.getElementById("acpdbTegRN")?.value||"", acpdbTegSN:document.getElementById("acpdbTegSN")?.value||"", acpdbTegTN:document.getElementById("acpdbTegTN")?.value||"", acpdbTeganganRN:document.getElementById("acpdbTegRN")?.value||"", acpdbTeganganSN:document.getElementById("acpdbTegSN")?.value||"", acpdbTeganganTN:document.getElementById("acpdbTegTN")?.value||"", acpdbTeganganRSTterhadapN:((document.getElementById("acpdbTegRN")?.value||"")+" / "+(document.getElementById("acpdbTegSN")?.value||"")+" / "+(document.getElementById("acpdbTegTN")?.value||"")), acpdbTegRS:document.getElementById("acpdbTegRS")?.value||"", acpdbTegST:document.getElementById("acpdbTegST")?.value||"", acpdbTegTR:document.getElementById("acpdbTegTR")?.value||"", acpdbTeganganRS:document.getElementById("acpdbTegRS")?.value||"", acpdbTeganganST:document.getElementById("acpdbTegST")?.value||"", acpdbTeganganTR:document.getElementById("acpdbTegTR")?.value||"", acpdbTeganganPhasa:((document.getElementById("acpdbTegRS")?.value||"")+" / "+(document.getElementById("acpdbTegST")?.value||"")+" / "+(document.getElementById("acpdbTegTR")?.value||"")), acpdbTeganganAntarPhasa:((document.getElementById("acpdbTegRS")?.value||"")+" / "+(document.getElementById("acpdbTegST")?.value||"")+" / "+(document.getElementById("acpdbTegTR")?.value||"")), acpdbArusR:document.getElementById("acpdbArusR")?.value||"", acpdbArusS:document.getElementById("acpdbArusS")?.value||"", acpdbArusT:document.getElementById("acpdbArusT")?.value||"", acpdbArusRST:((document.getElementById("acpdbArusR")?.value||"")+" / "+(document.getElementById("acpdbArusS")?.value||"")+" / "+(document.getElementById("acpdbArusT")?.value||"")), acpdbTegGN:document.getElementById("acpdbTegGN")?.value||"", acpdbTeganganGN:document.getElementById("acpdbTegGN")?.value||"", acpdbTeganganG_N:document.getElementById("acpdbTegGN")?.value||"", genset:((document.querySelector('input[name="adaGenset"]:checked')?.value||"Tidak")==="Ya"?"Ada":"Tidak Ada"), adaGenset:(document.querySelector('input[name="adaGenset"]:checked')?.value||"Tidak"), apakahAdaGenset:(document.querySelector('input[name="adaGenset"]:checked')?.value||"Tidak"), jumlahGenset:((document.querySelector('input[name="adaGenset"]:checked')?.value||"Tidak")==="Ya"?(document.querySelector('input[name="jumlahGenset"]:checked')?.value||"1"):""),
+      genset1Jenis:document.getElementById("genset1Jenis")?.value||"", genset1Tipe:document.getElementById("genset1Jenis")?.value||"", genset1Merek:document.getElementById("genset1Jenis")?.value||"", genset1JenisTipeMerek:document.getElementById("genset1Jenis")?.value||"", genset1Kapasitas:document.getElementById("genset1Kapasitas")?.value||"", genset1KapasitasKva:document.getElementById("genset1Kapasitas")?.value||"", genset1Kondisi:document.getElementById("genset1Kondisi")?.value||"", genset1TegRN:document.getElementById("genset1TegRN")?.value||"", genset1TegSN:document.getElementById("genset1TegSN")?.value||"", genset1TegTN:document.getElementById("genset1TegTN")?.value||"", genset1TeganganPhaseN:((document.getElementById("genset1TegRN")?.value||"")+" / "+(document.getElementById("genset1TegSN")?.value||"")+" / "+(document.getElementById("genset1TegTN")?.value||"")), genset1TeganganPhase_N:((document.getElementById("genset1TegRN")?.value||"")+" / "+(document.getElementById("genset1TegSN")?.value||"")+" / "+(document.getElementById("genset1TegTN")?.value||"")), genset1TegRS:document.getElementById("genset1TegRS")?.value||"", genset1TegST:document.getElementById("genset1TegST")?.value||"", genset1TegTR:document.getElementById("genset1TegTR")?.value||"", genset1TeganganPhasePhase:((document.getElementById("genset1TegRS")?.value||"")+" / "+(document.getElementById("genset1TegST")?.value||"")+" / "+(document.getElementById("genset1TegTR")?.value||"")), genset1TegGN:document.getElementById("genset1TegGN")?.value||"", genset1GNPanelATS:document.getElementById("genset1TegGN")?.value||"", genset1G_NPanelATS:document.getElementById("genset1TegGN")?.value||"", genset1RunningMode:document.getElementById("genset1Running")?.value||"", genset1Running:document.getElementById("genset1Running")?.value||"", genset1Kerusakan:document.getElementById("genset1Kerusakan")?.value||"", genset1KerusakanATS:document.getElementById("genset1Kerusakan")?.value||"",
+      genset2Jenis:document.getElementById("genset2Jenis")?.value||"", genset2Tipe:document.getElementById("genset2Jenis")?.value||"", genset2Merek:document.getElementById("genset2Jenis")?.value||"", genset2JenisTipeMerek:document.getElementById("genset2Jenis")?.value||"", genset2Kapasitas:document.getElementById("genset2Kapasitas")?.value||"", genset2KapasitasKva:document.getElementById("genset2Kapasitas")?.value||"", genset2Kondisi:document.getElementById("genset2Kondisi")?.value||"", genset2TegRN:document.getElementById("genset2TegRN")?.value||"", genset2TegSN:document.getElementById("genset2TegSN")?.value||"", genset2TegTN:document.getElementById("genset2TegTN")?.value||"", genset2TeganganPhaseN:((document.getElementById("genset2TegRN")?.value||"")+" / "+(document.getElementById("genset2TegSN")?.value||"")+" / "+(document.getElementById("genset2TegTN")?.value||"")), genset2TeganganPhase_N:((document.getElementById("genset2TegRN")?.value||"")+" / "+(document.getElementById("genset2TegSN")?.value||"")+" / "+(document.getElementById("genset2TegTN")?.value||"")), genset2TegRS:document.getElementById("genset2TegRS")?.value||"", genset2TegST:document.getElementById("genset2TegST")?.value||"", genset2TegTR:document.getElementById("genset2TegTR")?.value||"", genset2TeganganPhasePhase:((document.getElementById("genset2TegRS")?.value||"")+" / "+(document.getElementById("genset2TegST")?.value||"")+" / "+(document.getElementById("genset2TegTR")?.value||"")), genset2TegGN:document.getElementById("genset2TegGN")?.value||"", genset2GNPanelATS:document.getElementById("genset2TegGN")?.value||"", genset2G_NPanelATS:document.getElementById("genset2TegGN")?.value||"", genset2RunningMode:document.getElementById("genset2Running")?.value||"", genset2Running:document.getElementById("genset2Running")?.value||"", genset2Kerusakan:document.getElementById("genset2Kerusakan")?.value||"", genset2KerusakanATS:document.getElementById("genset2Kerusakan")?.value||"",
+      genset3Jenis:document.getElementById("genset3Jenis")?.value||"", genset3Tipe:document.getElementById("genset3Jenis")?.value||"", genset3Merek:document.getElementById("genset3Jenis")?.value||"", genset3JenisTipeMerek:document.getElementById("genset3Jenis")?.value||"", genset3Kapasitas:document.getElementById("genset3Kapasitas")?.value||"", genset3KapasitasKva:document.getElementById("genset3Kapasitas")?.value||"", genset3Kondisi:document.getElementById("genset3Kondisi")?.value||"", genset3TegRN:document.getElementById("genset3TegRN")?.value||"", genset3TegSN:document.getElementById("genset3TegSN")?.value||"", genset3TegTN:document.getElementById("genset3TegTN")?.value||"", genset3TeganganPhaseN:((document.getElementById("genset3TegRN")?.value||"")+" / "+(document.getElementById("genset3TegSN")?.value||"")+" / "+(document.getElementById("genset3TegTN")?.value||"")), genset3TeganganPhase_N:((document.getElementById("genset3TegRN")?.value||"")+" / "+(document.getElementById("genset3TegSN")?.value||"")+" / "+(document.getElementById("genset3TegTN")?.value||"")), genset3TegRS:document.getElementById("genset3TegRS")?.value||"", genset3TegST:document.getElementById("genset3TegST")?.value||"", genset3TegTR:document.getElementById("genset3TegTR")?.value||"", genset3TeganganPhasePhase:((document.getElementById("genset3TegRS")?.value||"")+" / "+(document.getElementById("genset3TegST")?.value||"")+" / "+(document.getElementById("genset3TegTR")?.value||"")), genset3TegGN:document.getElementById("genset3TegGN")?.value||"", genset3GNPanelATS:document.getElementById("genset3TegGN")?.value||"", genset3G_NPanelATS:document.getElementById("genset3TegGN")?.value||"", genset3RunningMode:document.getElementById("genset3Running")?.value||"", genset3Running:document.getElementById("genset3Running")?.value||"", genset3Kerusakan:document.getElementById("genset3Kerusakan")?.value||"", genset3KerusakanATS:document.getElementById("genset3Kerusakan")?.value||"", adaSps:(document.querySelector('input[name="adaSps"]:checked')?.value||"Tidak"), spsAda:(document.querySelector('input[name="adaSps"]:checked')?.value||"Tidak"), spsDayaPerPanel:document.getElementById("spsDayaPerPanel")?.value||"", spsDayaPerPanelWp:document.getElementById("spsDayaPerPanel")?.value||"", spsJumlahPanel:document.getElementById("spsJumlahPanel")?.value||"", spsJumlahPanelKeseluruhan:document.getElementById("spsJumlahPanel")?.value||"", spsPanelBagus:document.getElementById("spsPanelBagus")?.value||"", spsPanelRusak:document.getElementById("spsPanelRusak")?.value||"", spsKonektorKaratan:document.getElementById("spsKonektor")?.value||"", spsKonektor:document.getElementById("spsKonektor")?.value||"", spsTegOutput:document.getElementById("spsTegOutput")?.value||"", spsTeganganOutputPhaseN:document.getElementById("spsTegOutput")?.value||"", spsTeganganOutput:document.getElementById("spsTegOutput")?.value||"", spsTegGN:document.getElementById("spsTegGN")?.value||"", spsTeganganGN:document.getElementById("spsTegGN")?.value||"", spsOwner:document.getElementById("spsOwner")?.value||"", alarm:document.getElementById("alarm")?.value||"", alarmMainFail:(document.getElementById("alarmMainFail")?.checked?"Ya":"Tidak"), alarmRectiFail:(document.getElementById("alarmRectiFail")?.checked?"Ya":"Tidak"), alarmLowBatt:(document.getElementById("alarmLowBatt")?.checked?"Ya":"Tidak"), alarmHighTemp:(document.getElementById("alarmHighTemp")?.checked?"Ya":"Tidak"), alarmBattStolen:(document.getElementById("alarmBattStolen")?.checked?"Ya":"Tidak"), alarmDoorRecti:(document.getElementById("alarmDoorRecti")?.checked?"Ya":"Tidak"), alarmDoorOpenRecti:(document.getElementById("alarmDoorRecti")?.checked?"Ya":"Tidak"), alarmDoorBTS:(document.getElementById("alarmDoorBTS")?.checked?"Ya":"Tidak"), alarmDoorOpenBTS:(document.getElementById("alarmDoorBTS")?.checked?"Ya":"Tidak"), alarmGensetRunning:(document.getElementById("alarmGensetRunning")?.checked?"Ya":"Tidak"), alarmChecklist:(function(){var a=[];if(document.getElementById("alarmMainFail")?.checked)a.push("Main Fail");if(document.getElementById("alarmRectiFail")?.checked)a.push("Recti Fail");if(document.getElementById("alarmLowBatt")?.checked)a.push("Low Batt");if(document.getElementById("alarmHighTemp")?.checked)a.push("High Temp");if(document.getElementById("alarmBattStolen")?.checked)a.push("Batt Stolen");if(document.getElementById("alarmDoorRecti")?.checked)a.push("Door Open Recti");if(document.getElementById("alarmDoorBTS")?.checked)a.push("Door Open BTS");if(document.getElementById("alarmGensetRunning")?.checked)a.push("Genset Running");return a.join(", ")||"-";})(), catatan:document.getElementById("catatan").value, fotoSebelum:document.getElementById("fotoSebelum").value, fotoProgress:document.getElementById("fotoProgress").value, fotoSesudah:document.getElementById("fotoSesudah").value};
 }
-function saveAudit(){let allowedG=["","0","100","200","300","400","500","800"];let bad=[];let nRect=+document.getElementById("rectCount").value;for(let i=1;i<=nRect;i++){for(let g=1;g<=4;g++){let el=document.getElementById("battGroup"+i+"_"+g);let v=el?.value||"";if(v!=="" && allowedG.indexOf(v)===-1) bad.push("Rect "+i+" Group "+g+" = "+v);}}if(bad.length){alert("Battery Group Config tidak valid!
-"+bad.join("
-")+"
-Hanya boleh: 0, 100, 200, 300, 400, 500, 800.");return;}let d=collectAudit(true);if(!d.siteId){alert("Isi Site ID dulu.");return;}audits.unshift(d);localStorage.setItem("moti_audits",JSON.stringify(audits));document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");document.getElementById("saveMsg").innerHTML="<div class='success'>✓ BERHASIL - Data tersimpan di History app ini. Jika online, app juga mencoba kirim ke Apps Script TIDORE DATABASE. Jika belum masuk Sheet, pakai tombol Salin Baris di bawah.</div>";updateStats();renderHistory("");updateRowPreview();document.getElementById("saveMsg").innerHTML += "<div class='warn' style='margin-top:8px'>Cek di Sheet: buka tab <b>AUDIT</b> > scroll paling bawah. Kalau belum muncul dalam 5 detik, berarti Apps Script lama masih aktif — ganti dengan file FIXED di bawah.</div>";
+function saveAudit(){let allowedG=["","0","100","200","300","400","500","800"];let bad=[];let nRect=+document.getElementById("rectCount").value;for(let i=1;i<=nRect;i++){for(let g=1;g<=4;g++){let el=document.getElementById("battGroup"+i+"_"+g);let v=el?.value||"";if(v!=="" && allowedG.indexOf(v)===-1) bad.push("Rect "+i+" Group "+g+" = "+v);}}if(bad.length){alert("Battery Group Config tidak valid! " + bad.join(" | ") + " Hanya boleh: 0, 100, 200, 300, 400, 500, 800.");return;}let badModul=[];for(let mi=1;mi<=nRect;mi++){let okV=document.getElementById("rect"+mi+"ModulOk")?.value||"";let nokV=document.getElementById("rect"+mi+"ModulNok")?.value||"";if(okV!=="" && !/^[0-9]$/.test(okV)) badModul.push("Rect "+mi+" Modul OK = "+okV);if(nokV!=="" && !/^[0-9]$/.test(nokV)) badModul.push("Rect "+mi+" Modul NOK = "+nokV);}if(badModul.length){alert("Jumlah Modul Rectifier hanya boleh angka 1 digit (0-9)! "+badModul.join(" | "));return;}let ph=document.getElementById('jumlahPhasa')?.value||'';if(ph!==''&&ph!=='1'&&ph!=='3'){alert('Jumlah Phasa hanya boleh angka 1 atau 3!');return;}if(ph==='1'){['tegSN','tegTN','tegRS','tegST','tegTR','arusS','arusT','acpdbTegSN','acpdbTegTN','acpdbTegRS','acpdbTegST','acpdbTegTR','acpdbArusS','acpdbArusT','genset1TegSN','genset1TegTN','genset1TegRS','genset1TegST','genset1TegTR','genset2TegSN','genset2TegTN','genset2TegRS','genset2TegST','genset2TegTR','genset3TegSN','genset3TegTN','genset3TegRS','genset3TegST','genset3TegTR'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}let adaGensetVal=(document.querySelector('input[name="adaGenset"]:checked')?.value||'Tidak');if(adaGensetVal!=='Ya'){[1,2,3].forEach(function(n){['genset'+n+'Jenis','genset'+n+'Kapasitas','genset'+n+'TegRN','genset'+n+'TegSN','genset'+n+'TegTN','genset'+n+'TegRS','genset'+n+'TegST','genset'+n+'TegTR','genset'+n+'TegGN','genset'+n+'Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});});}let jmlGenset=parseInt((document.querySelector('input[name="jumlahGenset"]:checked')?.value||'1'),10);if(jmlGenset<2){['genset2Jenis','genset2Kapasitas','genset2TegRN','genset2TegSN','genset2TegTN','genset2TegRS','genset2TegST','genset2TegTR','genset2TegGN','genset2Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}if(jmlGenset<3){['genset3Jenis','genset3Kapasitas','genset3TegRN','genset3TegSN','genset3TegTN','genset3TegRS','genset3TegST','genset3TegTR','genset3TegGN','genset3Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}let adaSpsVal=(document.querySelector('input[name="adaSps"]:checked')?.value||'Tidak');if(adaSpsVal!=='Ada'){['spsDayaPerPanel','spsJumlahPanel','spsPanelBagus','spsPanelRusak','spsKonektor','spsTegOutput','spsTegGN','spsOwner'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}let d=collectAudit(true);if(!d.siteId){alert("Isi Site ID dulu.");return;}audits.unshift(d);localStorage.setItem("moti_audits",JSON.stringify(audits));document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");document.getElementById("saveMsg").innerHTML="<div class='success'>✓ BERHASIL - Data tersimpan di History app ini. Jika online, app juga mencoba kirim ke Apps Script TIDORE DATABASE. Jika belum masuk Sheet, pakai tombol Salin Baris di bawah.</div>";updateStats();renderHistory("");updateRowPreview();document.getElementById("saveMsg").innerHTML += "<div class='warn' style='margin-top:8px'>Cek di Sheet: buka tab <b>AUDIT</b> > scroll paling bawah. Kalau belum muncul dalam 5 detik, berarti Apps Script lama masih aktif — ganti dengan file FIXED di bawah.</div>";
 // try POST to Apps Script - no-cors, silent fail, never show 405 box
 try{let url=document.getElementById("appsUrl").value.trim()||APPS_URL_DEFAULT;fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)}).catch(()=>{});}catch(e){}}
 function copyRow(){let txt=document.getElementById("rowPreview").textContent;if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>alert("Baris disalin! Tempel di Sheet TIDORE DATABASE."));else{let ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();alert("Baris disalin!");}}
 function testConn(){let url=document.getElementById("appsUrl").value.trim();if(!url.includes("script.google.com")){document.getElementById("connStatus").textContent="URL belum valid. Pakai URL Apps Script yang sudah tertanam.";return;}document.getElementById("connStatus").textContent="● Tersambung - Format URL valid. Apps Script aktif (terverifikasi dari cek sebelumnya).";document.getElementById("activeUrl").textContent=url;}
 function saveUrl(){localStorage.setItem("moti_apps_url",document.getElementById("appsUrl").value);document.getElementById("activeUrl").textContent=document.getElementById("appsUrl").value;alert("URL disimpan.");}
 function refreshAudit(){document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");updateStats();renderHistory("");}
-function renderHistory(q){q=(q||"").toLowerCase();let list=audits.filter(a=>(a.siteId+" "+a.siteName+" "+a.inputBy).toLowerCase().includes(q));let html=list.slice(0,5).map(a=>`<div class="task"><b>${a.siteId} - ${a.siteName}</b><span>${a.tanggal} • Input By: ${a.inputBy} • ${a.cluster} / ${a.kab}</span><span>OK: ${a.battOk} | NOK: ${a.battNok}</span><span>${a.catatan||""}</span></div>`).join("")||"<p class='small'>Belum ada audit yang disimpan di app ini.</p>";document.getElementById("last5").innerHTML=html;document.getElementById("histList").innerHTML=list.map(a=>`<div class="task"><b>${a.siteId} - ${a.siteName}</b><span>${a.tanggal} • ${a.inputBy}</span><span>${a.battOk} / ${a.battNok} • ${a.mainpower}</span></div>`).join("")||"<p class='small'>Belum ada history.</p>";}
+function renderHistory(q){try{q=(q||"").toLowerCase();if(!Array.isArray(audits))audits=[];let list=audits.filter(function(a){a=a||{};return ((a.siteId||"")+" "+(a.siteName||"")+" "+(a.inputBy||"")).toLowerCase().includes(q)});let html=list.slice(0,5).map(function(a){a=a||{};return `<div class="task"><b>${a.siteId||"-"} - ${a.siteName||"-"}</b><span>${a.tanggal||"-"} • Input By: ${a.inputBy||"-"} • ${a.cluster||"-"} / ${a.kab||"-"}</span><span>OK: ${a.battOk||"-"} | NOK: ${a.battNok||"-"}</span><span>${a.catatan||""}</span></div>`}).join("")||"<p class='small'>Belum ada audit yang disimpan di app ini.</p>";var l5=document.getElementById("last5");if(l5)l5.innerHTML=html;var hl=document.getElementById("histList");if(hl)hl.innerHTML=list.map(function(a){a=a||{};return `<div class="task"><b>${a.siteId||"-"} - ${a.siteName||"-"}</b><span>${a.tanggal||"-"} • ${a.inputBy||"-"}</span><span>${a.battOk||"-"} / ${a.battNok||"-"} • ${a.mainpower||"-"}</span></div>`}).join("")||"<p class='small'>Belum ada history.</p>";}catch(e){}}
 function doCheckin(){let s=document.getElementById("ciSite").value;let p=document.getElementById("ciPic").value||document.getElementById("pic").value;let n=document.getElementById("ciNote").value;if(!s){alert("Isi Site ID");return;}let rec={site:s,pic:p,note:n,time:new Date().toLocaleString("id-ID")};checkins.unshift(rec);localStorage.setItem("moti_checkins",JSON.stringify(checkins));document.getElementById("ciMsg").innerHTML="<div class='success'>✓ Check-IN tersimpan: "+s+" - "+p+"</div>";renderCheckin();}
 function renderCheckin(){document.getElementById("ciList").innerHTML=checkins.slice(0,10).map(c=>`<div class="task"><b>${c.site} - ${c.pic}</b><span>${c.time}</span><span>${c.note||""}</span></div>`).join("")||"<p class='small'>Belum ada check-in.</p>";}
 function addInv(){let name=document.getElementById("invName").value;let qty=document.getElementById("invQty").value;let site=document.getElementById("invSite").value;if(!name)return alert("Isi nama barang");invs.unshift({name,qty,site});localStorage.setItem("moti_invs",JSON.stringify(invs));renderInv();}
@@ -542,6 +774,8 @@ renderRect();document.getElementById("inputBy").value=document.getElementById("p
 document.querySelectorAll("#battOk input, #battOk select, #battNok input, #battNok select").forEach(el=>el.addEventListener("change",updateBattSum));
 document.getElementById("catatan").addEventListener("input",updateRowPreview);
 updateStats();renderTasks();renderHistory("");renderInv();renderCheckin();updateBattSum();
+// Listener cadangan - kalau onclick inline ke-block, klik menu tetap jalan
+document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest("[data-page]"):null;if(b){e.preventDefault();show(b.getAttribute("data-page"),b);}});
 // try load tasks CSV silently, no error box
 try{fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSwB-OkKVEEGm8_HjQhyKg8K6yUlM8IaZkyRTcSVzPpxulkU1uUXUIJGhWrUC13CFv9YNCTGh-GbX3V/pub?output=csv").then(r=>r.text()).then(t=>{if(t&&t.length>100){document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");}}).catch(()=>{});}catch(e){}
 })();
