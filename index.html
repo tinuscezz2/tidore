@@ -258,10 +258,16 @@ img{max-width:100%;height:auto}
     <p class="small">Tanggal otomatis dari waktu submit (disembunyikan). Input By terkunci dari Pilih Nama PIC. Cluster & Kabupaten auto dari Site ID.</p>
     <div id="warnPic" class="warn hidden">⚠️ Kamu memilih <b>Semua / Admin</b>. Pilih nama PIC dulu di atas supaya Input By terisi nama kamu, bukan Admin.</div>
 
-    <label>Site ID * <small>contoh: TDE009</small></label>
-    <input id="siteId" placeholder="TDE009" oninput="onSiteId()" list="siteList">
+    <label>Site ID * <small>dari DATASITE — 1197 site — pilih, tidak perlu ketik</small></label>
+    <input id="siteSearch" placeholder="🔍 Cari Site ID / Nama... contoh: TDE009 / FAULERY" oninput="filterSiteOptions()">
+    <select id="siteId" onchange="onSiteId()">
+      <option value="">— Pilih Site ID dari DATASITE (1197 site) —</option>
+    </select>
+    <div class="row" style="margin-top:8px"><button type="button" class="btn btn-light" onclick="refreshSiteList()">↻ Refresh Site ID dari DATASITE</button><button type="button" class="btn btn-outline" onclick="enableManualSite()">✏️ Ketik Manual</button></div>
+    <input id="siteIdManual" placeholder="Ketik Site ID manual, contoh: TDE009" style="display:none;margin-top:8px" oninput="onSiteIdManual()">
+    <div class="field-note" id="siteHint">Pilih Site ID, Cluster & Kabupaten akan terisi otomatis.</div>
+    <div class="field-note" id="siteCount"></div>
     <datalist id="siteList"></datalist>
-    <div class="field-note" id="siteHint">Ketik Site ID, Cluster & Kabupaten akan terisi otomatis.</div>
 
     <div class="grid2">
       <div><label>Site Name</label><input id="siteName" placeholder="Auto / isi manual"></div>
@@ -593,7 +599,15 @@ function openTask(idx){let t=tasks[idx];document.getElementById("taskDetail").cl
 function savePhotoDoc(){alert("Foto tersimpan (link dicatat di History).");}
 
 // Audit
-function onSiteId(){let id=document.getElementById("siteId").value.trim().toUpperCase();document.getElementById("siteId").value=id;let m=siteMap[id];if(m){document.getElementById("cluster").value=m.cluster;document.getElementById("kab").value=m.kab;document.getElementById("siteClass").value=m.kelas;document.getElementById("oba").value=m.oba;if(!document.getElementById("siteName").value)document.getElementById("siteName").value=m.name;document.getElementById("siteHint").textContent="✓ Auto: "+m.cluster+" • "+m.kelas+" • "+m.oba+" • "+m.kab;}else if(id){document.getElementById("siteHint").textContent="Site ID belum ada di mapping, Cluster/Kabupaten bisa diisi manual (tetap bisa simpan).";}}
+let datasiteList=[];let datasiteLive=false;
+function buildSiteMapFromList(list){list.forEach(function(s){if(!s||!s.siteId)return;siteMap[s.siteId]={cluster:s.cluster||"",kab:s.kab||"",kelas:s.kelas||"Gold",oba:s.oba||"",name:s.siteName||s.siteId};});}
+function renderSiteOptions(){var sel=document.getElementById("siteId");if(!sel)return;var cur=sel.value;var q=(document.getElementById("siteSearch")?.value||"").trim().toLowerCase();var keys=Object.keys(siteMap).sort();var shown=keys.filter(function(k){if(!q)return true;var m=siteMap[k]||{};return (k+" "+(m.name||"")+" "+(m.cluster||"")+" "+(m.kab||"")).toLowerCase().includes(q);});sel.innerHTML='<option value="">— Pilih Site ID dari DATASITE (1197 site) —</option>'+shown.map(function(k){var m=siteMap[k]||{};var label=k+(m.name&&m.name!==k?" - "+m.name:"")+(m.cluster?" ("+m.cluster+")":"");return `<option value="${k}">${label}</option>`;}).join("");if(cur&&siteMap[cur])sel.value=cur;var cnt=document.getElementById("siteCount");if(cnt)cnt.textContent="Menampilkan "+shown.length+" dari "+keys.length+" Site ID"+(datasiteLive?(keys.length===1197?" • Live dari DATASITE — lengkap 1197":" • Live dari DATASITE — ⚠️ harusnya 1197, baru "+keys.length+" site"):" • Fallback lokal — tekan Refresh untuk ambil 1197 site dari DATASITE")+(q?" • Filter: \""+q+"\"":"");var dl=document.getElementById("siteList");if(dl)dl.innerHTML=keys.map(function(k){return `<option value="${k}">`;}).join("");}
+function filterSiteOptions(){renderSiteOptions();}
+function enableManualSite(){var m=document.getElementById("siteIdManual");if(m){m.style.display="";m.focus();}}
+function onSiteIdManual(){var v=(document.getElementById("siteIdManual").value||"").trim().toUpperCase();if(!v)return;if(!siteMap[v])siteMap[v]={cluster:"",kab:"",kelas:"Gold",oba:"",name:""};renderSiteOptions();var sel=document.getElementById("siteId");if(sel)sel.value=v;onSiteId();}
+function refreshSiteList(){var hint=document.getElementById("siteHint");if(hint)hint.textContent="Mengambil Site ID dari DATASITE...";var url=(document.getElementById("appsUrl")?.value||"").trim()||APPS_URL_DEFAULT;fetch(url+"?action=datasite").then(function(r){return r.text();}).then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}if(j&&j.result==="success"&&j.sites&&j.sites.length){datasiteList=j.sites;datasiteLive=true;buildSiteMapFromList(j.sites);renderSiteOptions();if(hint)hint.textContent="✓ Berhasil ambil "+j.sites.length+" Site ID dari DATASITE."+(j.sites.length!==1197?" ⚠️ Harusnya 1197, baru dapat "+j.sites.length+" — cek DATASITE ada baris kosong / duplikat / filter, lalu Refresh lagi.":"");}else{throw new Error("Apps Script lama / bukan JSON");}}).catch(function(){return fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSwB-OkKVEEGm8_HjQhyKg8K6yUlM8IaZkyRTcSVzPpxulkU1uUXUIJGhWrUC13CFv9YNCTGh-GbX3V/pub?output=csv").then(function(r){return r.text();}).then(function(t){var parsed=parseDatasiteCsv(t);if(parsed&&parsed.length){datasiteList=parsed;datasiteLive=true;buildSiteMapFromList(parsed);renderSiteOptions();if(hint)hint.textContent="✓ Berhasil ambil "+parsed.length+" Site ID dari DATASITE (via Sheet)."+(parsed.length!==1197?" ⚠️ Harusnya 1197, baru dapat "+parsed.length+" — cek DATASITE.":"");}else{throw new Error("CSV bukan DATASITE");}}).catch(function(){renderSiteOptions();if(hint)hint.textContent="Belum bisa ambil live dari DATASITE — tampilkan fallback lokal. Redeploy Apps Script FIXED terbaru dulu, lalu tekan Refresh lagi.";});});}
+function parseDatasiteCsv(text){try{var lines=text.split(/\r?\n/).filter(function(l){return l.trim();});if(!lines.length)return [];var header=lines[0].toLowerCase();if(header.indexOf("site")<0)return [];function splitCsv(l){var out=[],cur="",inq=false;for(var i=0;i<l.length;i++){var c=l[i];if(c==='"'){inq=!inq;}else if(c===","&&!inq){out.push(cur);cur="";}else{cur+=c;}}out.push(cur);return out.map(function(s){return s.replace(/^"|"$/g,"").trim();});}var h=splitCsv(lines[0]).map(function(x){return x.toLowerCase();});function find(keys){for(var i=0;i<h.length;i++){for(var k=0;k<keys.length;k++){if(h[i].indexOf(keys[k])!==-1)return i;}}return -1;}var cId=find(["site id","siteid"]),cName=find(["site name","sitename","nama"]),cCluster=find(["cluster"]),cKab=find(["kabupaten","kab"]),cClass=find(["class","kelas"]),cOba=find(["oba"]);if(cId<0)return [];var out=[];for(var r=1;r<lines.length;r++){var row=splitCsv(lines[r]);var sid=(row[cId]||"").trim().toUpperCase();if(!sid)continue;out.push({siteId:sid,siteName:cName>=0?(row[cName]||""):"",cluster:cCluster>=0?(row[cCluster]||""):"",kab:cKab>=0?(row[cKab]||""):"",kelas:cClass>=0?(row[cClass]||"Gold"):"Gold",oba:cOba>=0?(row[cOba]||""):""});}return out;}catch(e){return [];}}
+function onSiteId(){var el=document.getElementById("siteId");if(!el)return;let id=(el.value||"").trim().toUpperCase();if(!id){document.getElementById("siteHint").textContent="Pilih Site ID dulu dari DATASITE.";return;}let m=siteMap[id];if(m){document.getElementById("cluster").value=m.cluster;document.getElementById("kab").value=m.kab;document.getElementById("siteClass").value=m.kelas;document.getElementById("oba").value=m.oba;document.getElementById("siteName").value=m.name;document.getElementById("siteHint").textContent="✓ Auto: "+m.cluster+" • "+m.kelas+" • "+m.oba+" • "+m.kab;}else{document.getElementById("siteHint").textContent="Site ID belum ada di mapping, Cluster/Kabupaten bisa diisi manual (tetap bisa simpan).";}}
 
 
 function cleanDC(el){el.value=el.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1').slice(0,5);}
@@ -769,7 +783,7 @@ function renderInv(){document.getElementById("invList").innerHTML=invs.map(v=>`<
 // init
 (function(){
 let savedUrl=localStorage.getItem("moti_apps_url");if(savedUrl){document.getElementById("appsUrl").value=savedUrl;document.getElementById("activeUrl").textContent=savedUrl;}
-let dl=document.getElementById("siteList");dl.innerHTML=Object.keys(siteMap).map(k=>`<option value="${k}">`).join("");
+renderSiteOptions();refreshSiteList();
 renderRect();document.getElementById("inputBy").value=document.getElementById("pic").value;
 document.querySelectorAll("#battOk input, #battOk select, #battNok input, #battNok select").forEach(el=>el.addEventListener("change",updateBattSum));
 document.getElementById("catatan").addEventListener("input",updateRowPreview);
