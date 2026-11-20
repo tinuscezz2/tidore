@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MOTI - Monitoring Operation and Territory</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
@@ -45,7 +45,7 @@ main{padding:14px;max-width:900px;margin:0 auto;padding-bottom:80px}
 .task span{font-size:12px;color:#444;display:block;margin-top:4px;line-height:1.5}
 .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#FFE9E9;color:#B00000}
 .badge.green{background:#E6F7EA;color:#0B6B2F}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.batt-group-row{grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}.batt-group-row input{padding:10px 8px;font-size:13px;text-align:center}@media(max-width:480px){.batt-group-row{grid-template-columns:1fr 1fr 1fr 1fr;gap:4px}.batt-group-row input{padding:9px 4px;font-size:12px}}
 label{font-size:12px;font-weight:700;display:block;margin:12px 0 6px;color:#222}
 label small{font-weight:400;color:#666}
 .field-note{font-size:11px;color:#666;margin-top:4px}
@@ -71,6 +71,95 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 th{background:#f9f9f9}
 .footer{font-size:11px;color:#888;text-align:center;margin-top:20px;line-height:1.6}
+
+/* ===== MOTI MOBILE FRIENDLY - override ===== */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit}
+input,select,textarea{font-size:16px;min-height:46px}
+button{min-height:44px}
+a{word-break:break-word}
+img{max-width:100%;height:auto}
+
+/* Bottom nav - mobile only */
+.bottom-nav{display:none}
+@media(min-width:641px){
+  nav{position:sticky;top:0;z-index:9}
+  header{position:sticky;top:0;z-index:10}
+}
+@media(max-width:640px){
+  /* Header jadi lebih ramping & tidak makan tempat */
+  header{padding:12px 14px 10px;position:relative}
+  .top{gap:10px}
+  .logo{width:40px;height:40px;font-size:16px;flex-shrink:0}
+  h1{font-size:18px}
+  h1 span{font-size:11px}
+  .picwrap{margin-top:10px}
+  .picwrap label{font-size:12px}
+  .picwrap select{font-size:15px}
+  .hint{font-size:11px}
+  /* Sembunyikan nav atas, ganti bottom nav */
+  nav{display:none!important}
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:#fff;border-top:1px solid #eee;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.08);gap:2px}
+  .bottom-nav button{flex:1;border:0;background:transparent;padding:6px 2px 4px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;color:#666;font-size:10px;font-weight:700;line-height:1.1}
+  .bottom-nav button span.ic{font-size:20px;line-height:1}
+  .bottom-nav button.active{color:#E60000;background:#FFF1F1}
+  .bottom-nav button.active span.ic{transform:scale(1.05)}
+  main{padding:12px 12px 96px;max-width:100%}
+  .card{padding:14px;border-radius:14px;margin-bottom:12px}
+  .card h2{font-size:15px}
+  .card p.sub{font-size:12.5px}
+  /* Form grid: 2 kolom -> 1 kolom, KECUALI Battery Group Config tetap 4 kolom 1 baris */
+  .grid2{grid-template-columns:1fr!important;gap:0}
+  .grid2 > div{margin-bottom:2px}
+  .grid2.batt-group-row{grid-template-columns:1fr 1fr 1fr 1fr!important;gap:6px!important;display:grid}
+  .grid2.batt-group-row label{font-size:11px;margin:8px 0 4px}
+  .grid2.batt-group-row input{padding:11px 4px;font-size:14px}
+  /* Stats tetap 2 kolom tapi lebih padat */
+  .stats{grid-template-columns:1fr 1fr;gap:8px}
+  .stat{padding:12px 10px;border-radius:12px}
+  .stat b{font-size:24px}
+  /* Tombol: full width di HP, gampang dipencet */
+  .row{flex-direction:column;gap:8px}
+  .row .btn{flex:none;width:100%;padding:13px 14px;font-size:14.5px}
+  .btn{padding:13px 14px;width:100%}
+  .btn-light,.btn-outline{width:100%}
+  /* Baterai row: select fleksibel, qty & hapus tetap muat */
+  .batt-row{gap:6px;align-items:stretch}
+  .batt-row select{flex:1;min-width:0;font-size:14px;padding:11px 8px}
+  .batt-row input{width:62px;flex-shrink:0;text-align:center}
+  .batt-row button{width:42px!important;flex-shrink:0;padding:0}
+  .rect{padding:13px;border-radius:12px}
+  .rect h3{font-size:14px}
+  .summary{font-size:12.5px;line-height:1.5;word-break:break-word}
+  /* KV detail: label di atas, value di bawah */
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv b{font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:#888}
+  /* Table / list: scroll horizontal, tidak pecah layout */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+  .task{padding:12px}
+  .task b{font-size:13.5px}
+  /* Sticky save audit: selalu kelihatan pas scroll form panjang */
+  .save-bar{position:sticky;bottom:72px;z-index:20;background:#fff;border:1px solid #eee;border-radius:14px;padding:10px;box-shadow:0 6px 20px rgba(0,0,0,.10);margin-top:14px}
+  .save-bar .row{flex-direction:column}
+  .footer{padding-bottom:8px}
+  pre{font-size:11px;overflow-x:auto}
+  label{margin:11px 0 6px}
+}
+@media(max-width:380px){
+  .bottom-nav button{font-size:9px;padding:5px 1px 3px}
+  .bottom-nav button span.ic{font-size:18px}
+  .stat b{font-size:22px}
+  .grid2.batt-group-row{gap:4px!important}
+  .grid2.batt-group-row input{padding:10px 2px;font-size:13px}
+  main{padding-left:10px;padding-right:10px}
+  .card{padding:12px}
+}
+@media(min-width:641px){
+  .bottom-nav{display:none!important}
+  main{padding-bottom:40px}
+}
+
 </style>
 </head>
 <body>
@@ -190,15 +279,8 @@ th{background:#f9f9f9}
     <select id="rectCount" onchange="renderRect()"><option value="1">1 Rectifier</option><option value="2">2 Rectifier</option><option value="3">3 Rectifier</option></select>
     <div id="rectBox"></div>
 
-    <label>Jenis Baterai - OK (bisa gabung sampai 3 jenis)</label>
-    <div id="battOk"></div>
-    <button class="btn btn-light" style="margin-top:8px" onclick="addBatt('battOk')">+ Tambah Jenis OK</button>
-    <div class="summary" id="sumOk">OK: -</div>
-
-    <label>Jenis Baterai - NOK (bisa gabung sampai 3 jenis)</label>
-    <div id="battNok"></div>
-    <button class="btn btn-light" style="margin-top:8px" onclick="addBatt('battNok')">+ Tambah Jenis NOK</button>
-    <div class="summary" id="sumNok">NOK: -</div>
+    <p class="small" style="margin:6px 0">Baterai di bawah ini per Rectifier — tiap Rectifier punya Jenis Baterai OK / NOK + Battery Group Config sendiri.</p>
+    <datalist id="battGroupList"><option value="0"></option><option value="100"></option><option value="200"></option><option value="300"></option><option value="400"></option><option value="500"></option><option value="800"></option></datalist>
 
     <label>Mainpower</label>
     <select id="mainpower"><option>PLN Normal</option><option>PLN Padam</option><option>Genset</option><option>PLN + Genset</option></select>
@@ -217,7 +299,7 @@ th{background:#f9f9f9}
     <input id="fotoSesudah" placeholder="Link Foto Sesudah" style="margin-top:8px">
     <p class="small">Upload file langsung belum tersedia di HTML ini — pakai link Google Drive / foto.</p>
 
-    <div class="row" style="margin-top:14px"><button class="btn btn-red" onclick="saveAudit()">💾 Simpan Audit Power</button><button class="btn btn-outline" onclick="copyRow()">📋 Salin Baris</button></div>
+    <div class="save-bar"><div class="row" style="margin-top:0"><button class="btn btn-red" onclick="saveAudit()">💾 Simpan Audit Power</button><button class="btn btn-outline" onclick="copyRow()">📋 Salin Baris</button></div></div>
     <div id="saveMsg"></div>
     <label>Baris Siap Masuk Sheet TIDORE DATABASE (Copy-Paste)</label>
     <pre id="rowPreview">Isi form dulu, baris akan muncul di sini.</pre>
@@ -279,6 +361,16 @@ th{background:#f9f9f9}
 
 <div class="footer">MOTI v2.0 Standalone • Siap dipakai • File ini bisa dibuka langsung / di-upload ke GitHub Pages sebagai index.html<br>TIDORE DATABASE: docs.google.com - TIDORE DATABASE • Apps Script sudah tertanam</div>
 </main>
+
+<!-- BOTTOM NAV - Mobile Friendly -->
+<div class="bottom-nav" id="bottomNav">
+  <button class="active" onclick="show('dashboard',this)"><span class="ic">🏠</span>Dashboard</button>
+  <button onclick="show('audit',this)"><span class="ic">⚡</span>Audit Power</button>
+  <button onclick="show('checkin',this)"><span class="ic">📍</span>Check-IN</button>
+  <button onclick="show('history',this)"><span class="ic">🕘</span>History</button>
+  <button onclick="show('project',this)"><span class="ic">📋</span>Project</button>
+  <button onclick="show('inventory',this)"><span class="ic">📦</span>Inventory</button>
+</div>
 <script>
 const APPS_URL_DEFAULT="https://script.google.com/macros/s/AKfycbwC5r8mbWUtQzHnvN-DynApQFm2hZCqTtKWvOEVx70WwPZ8F_ws2r_aoDyj7WwQMGdI/exec";
 const BAT_OPTS=["FB100C1","FB100C2","FB100B3","R321","Floating","CDC","Tidak Ada Baterai"];
@@ -304,7 +396,7 @@ let audits=JSON.parse(localStorage.getItem("moti_audits")||"[]");
 let checkins=JSON.parse(localStorage.getItem("moti_checkins")||"[]");
 let invs=JSON.parse(localStorage.getItem("moti_invs")||"[]");
 
-function show(id,btn){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");if(id==="history"||id==="audit")renderHistory("");if(id==="project")renderTasks();if(id==="inventory")renderInv();if(id==="checkin")renderCheckin();window.scrollTo({top:0,behavior:"smooth"});}
+function show(id,btn){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");var map={dashboard:0,audit:1,checkin:2,history:3,project:4,inventory:5};var idx=map[id];if(idx!=null){var topBtn=document.querySelectorAll("nav button")[idx];if(topBtn)topBtn.classList.add("active");var botBtn=document.querySelectorAll(".bottom-nav button")[idx];if(botBtn)botBtn.classList.add("active");}if(id==="history"||id==="audit")renderHistory("");if(id==="project")renderTasks();if(id==="inventory")renderInv();if(id==="checkin")renderCheckin();window.scrollTo({top:0,behavior:"smooth"});}
 function onPicChange(){let p=document.getElementById("pic").value;document.getElementById("picHint").textContent="Menampilkan tugas untuk: "+p+" • "+(p==="Semua / Admin"?"semua tugas OPEN":"tugas OPEN untuk "+p);document.getElementById("inputBy").value=p;document.getElementById("aPicName").textContent=p;document.getElementById("warnPic").classList.toggle("hidden",p!=="Semua / Admin");renderTasks();updateStats();}
 function picMatch(taskPic,selected){if(selected==="Semua / Admin")return true;let parts=taskPic.split(/[\/,&]/).map(s=>s.trim().toLowerCase());return parts.some(x=>x===selected.toLowerCase()||selected.toLowerCase().includes(x)||x.includes(selected.toLowerCase()));}
 function filteredTasks(){let p=document.getElementById("pic").value;let list=tasks.filter(t=>picMatch(t.pic,p));if(taskFilter==="OPEN")list=list.filter(t=>t.status==="OPEN");if(taskFilter==="DONE")list=list.filter(t=>t.status==="DONE");let q=(document.getElementById("taskSearch")?.value||"").toLowerCase();if(q)list=list.filter(t=>(t.siteId+" "+t.siteName+" "+t.pic+" "+t.action).toLowerCase().includes(q));return list;}
@@ -317,15 +409,119 @@ function savePhotoDoc(){alert("Foto tersimpan (link dicatat di History).");}
 
 // Audit
 function onSiteId(){let id=document.getElementById("siteId").value.trim().toUpperCase();document.getElementById("siteId").value=id;let m=siteMap[id];if(m){document.getElementById("cluster").value=m.cluster;document.getElementById("kab").value=m.kab;document.getElementById("siteClass").value=m.kelas;document.getElementById("oba").value=m.oba;if(!document.getElementById("siteName").value)document.getElementById("siteName").value=m.name;document.getElementById("siteHint").textContent="✓ Auto: "+m.cluster+" • "+m.kelas+" • "+m.oba+" • "+m.kab;}else if(id){document.getElementById("siteHint").textContent="Site ID belum ada di mapping, Cluster/Kabupaten bisa diisi manual (tetap bisa simpan).";}}
-function renderRect(){let n=+document.getElementById("rectCount").value;let box=document.getElementById("rectBox");box.innerHTML="";for(let i=1;i<=n;i++){box.innerHTML+=`<div class="rect"><h3>Rectifier ${i}</h3><label>Status Rectifier ${i}</label><select id="rect${i}Status"><option>Normal</option><option>Fail</option><option>Off</option></select><label>Tegangan (V)</label><input id="rect${i}Volt" placeholder="54.5"><label>Arus (A)</label><input id="rect${i}Amp" placeholder="10"></div>`;}}
-function battRowHTML(containerId){return `<div class="batt-row"><select>${BAT_OPTS.map(o=>`<option>${o}</option>`).join("")}</select><input type="number" value="1" min="0"><button class="btn btn-light" onclick="this.parentElement.remove();updateBattSum()">✕</button></div>`;}
-function addBatt(id){let el=document.getElementById(id);if(el.children.length>=3){alert("Maksimal 3 jenis per kategori.");return;}el.insertAdjacentHTML("beforeend",battRowHTML(id));updateBattSum();}
-function battSummary(id){let rows=[...document.getElementById(id).querySelectorAll(".batt-row")];let parts=rows.map(r=>{let sel=r.querySelector("select").value;let qty=r.querySelector("input").value||"0";return qty+"x "+sel;}).filter(s=>!s.startsWith("0x"));return parts.length?parts.join(" + "):"-";}
-function battTotal(id){let rows=[...document.getElementById(id).querySelectorAll(".batt-row")];let t=0;rows.forEach(r=>{t+=parseInt(r.querySelector("input").value||"0",10)||0;});return t;}
-function updateBattSum(){let okT=battTotal("battOk");let nokT=battTotal("battNok");document.getElementById("sumOk").textContent="OK: Total "+okT+" baterai - "+battSummary("battOk")+"  →  Masuk ke Sheet AUDIT kolom Rect1 Batt OK = "+okT;document.getElementById("sumNok").textContent="NOK: Total "+nokT+" baterai - "+battSummary("battNok")+"  →  Masuk ke Sheet AUDIT kolom Rect1 Batt NOK = "+nokT;updateRowPreview();}
-function updateRowPreview(){let d=collectAudit(false);document.getElementById("rowPreview").textContent=[d.tanggal,d.siteId,d.siteName,d.siteClass,d.cluster,d.kab,d.inputBy,"Rect:"+d.rectCount,"Jenis Batt OK: "+d.battOk+" (Total OK="+d.battOkTotal+" -> Rect1 Batt OK)","Jenis Batt NOK: "+d.battNok+" (Total NOK="+d.battNokTotal+" -> Rect1 Batt NOK)",d.mainpower,d.acpdb,d.genset,d.alarm,d.catatan].join(" | ");}
-function collectAudit(withDate){let now=new Date();let tanggal=now.toISOString().slice(0,10)+" "+now.toTimeString().slice(0,8);return{tanggal: withDate? tanggal: new Date().toISOString().slice(0,10), siteId:document.getElementById("siteId").value.trim().toUpperCase(), siteName:document.getElementById("siteName").value, siteClass:document.getElementById("siteClass").value, class_:document.getElementById("siteClass").value, cluster:document.getElementById("cluster").value, kab:document.getElementById("kab").value, kabupaten:document.getElementById("kab").value, oba:document.getElementById("oba").value, inputBy:document.getElementById("pic").value, rectCount:document.getElementById("rectCount").value, jumlahRectifier:document.getElementById("rectCount").value, battOk:battSummary("battOk"), battNok:battSummary("battNok"), battOkTotal:battTotal("battOk"), battNokTotal:battTotal("battNok"), rect1BattOK:battTotal("battOk"), rect1BattNOK:battTotal("battNok"), mainpower:document.getElementById("mainpower").value, acpdb:document.getElementById("acpdb").value, genset:document.getElementById("genset").value, alarm:document.getElementById("alarm").value, catatan:document.getElementById("catatan").value, fotoSebelum:document.getElementById("fotoSebelum").value, fotoProgress:document.getElementById("fotoProgress").value, fotoSesudah:document.getElementById("fotoSesudah").value};}
-function saveAudit(){let d=collectAudit(true);if(!d.siteId){alert("Isi Site ID dulu.");return;}audits.unshift(d);localStorage.setItem("moti_audits",JSON.stringify(audits));document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");document.getElementById("saveMsg").innerHTML="<div class='success'>✓ BERHASIL - Data tersimpan di History app ini. Jika online, app juga mencoba kirim ke Apps Script TIDORE DATABASE. Jika belum masuk Sheet, pakai tombol Salin Baris di bawah.</div>";updateStats();renderHistory("");updateRowPreview();document.getElementById("saveMsg").innerHTML += "<div class='warn' style='margin-top:8px'>Cek di Sheet: buka tab <b>AUDIT</b> > scroll paling bawah. Kalau belum muncul dalam 5 detik, berarti Apps Script lama masih aktif — ganti dengan file FIXED di bawah.</div>";
+
+
+function cleanDC(el){el.value=el.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1').slice(0,5);}
+function validateBattGroup(el){
+  var allowed=["0","100","200","300","400","500","800"];
+  var v=(el.value||"").trim();
+  var cleaned=v.replace(/[^0-9]/g,'');
+  if(cleaned!==v){ el.value=cleaned; v=cleaned; }
+  var rectEl = el.closest('.rect');
+  var note = rectEl ? rectEl.querySelector('.batt-group-note') : document.getElementById("battGroupNote");
+  if(v===""){ el.style.borderColor="#ddd"; if(note){note.textContent="Hanya boleh: 0, 100, 200, 300, 400, 500, 800. Selain itu tidak bisa disimpan."; note.style.color="#666";} return; }
+  if(allowed.indexOf(v)===-1){
+    if(v.length>=3){
+      el.value=""; el.style.borderColor="#E60000";
+      if(note){note.textContent="⚠️ Nilai '"+v+"' tidak diperbolehkan! Hanya boleh: 0, 100, 200, 300, 400, 500, 800."; note.style.color="#B00000";}
+      return;
+    }
+    el.style.borderColor="#FFA500";
+    if(note){note.textContent="Lanjutkan ketik sampai jadi salah satu: 0, 100, 200, 300, 400, 500, 800."; note.style.color="#7A2A00";}
+  } else {
+    el.style.borderColor="#0B6B2F";
+    if(note){note.textContent="✓ Valid. Hanya boleh: 0, 100, 200, 300, 400, 500, 800."; note.style.color="#0B6B2F";}
+  }
+}
+function getBattGroupConfigForRect(i){
+  var g1=document.getElementById("battGroup"+i+"_1")?.value||"";
+  var g2=document.getElementById("battGroup"+i+"_2")?.value||"";
+  var g3=document.getElementById("battGroup"+i+"_3")?.value||"";
+  var g4=document.getElementById("battGroup"+i+"_4")?.value||"";
+  return [g1,g2,g3,g4].join(" | ");
+}
+function renderRect(){
+  let n=+document.getElementById("rectCount").value;
+  let box=document.getElementById("rectBox");
+  box.innerHTML="";
+  for(let i=1;i<=n;i++){
+    box.innerHTML+=`<div class="rect"><h3>Rectifier ${i}</h3>
+      <label>DC Voltage (V)</label><input id="rect${i}Volt" placeholder="54.5" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"><div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 54.5</div>
+      <label>Load Current (A)</label><input id="rect${i}Amp" placeholder="10" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"><div class="field-note">Hanya angka & titik (.), maks 5 karakter. Contoh: 10.5</div>
+      <label>Jenis Baterai - OK (bisa gabung sampai 3 jenis) - Rectifier ${i}</label>
+      <div id="battOk${i}"></div>
+      <button type="button" class="btn btn-light" style="margin-top:8px" onclick="addBatt('battOk${i}')">+ Tambah Jenis OK</button>
+      <div class="summary" id="sumOk${i}">OK: -</div>
+      <label>Jenis Baterai - NOK (bisa gabung sampai 3 jenis) - Rectifier ${i}</label>
+      <div id="battNok${i}"></div>
+      <button type="button" class="btn btn-light" style="margin-top:8px" onclick="addBatt('battNok${i}')">+ Tambah Jenis NOK</button>
+      <div class="summary" id="sumNok${i}">NOK: -</div>
+      <label>Battery Group Config - Rectifier ${i}</label>
+      <div class="grid2 batt-group-row" style="grid-template-columns:1fr 1fr 1fr 1fr;gap:6px">
+        <div><label style="margin-top:0">Group 1</label><input id="battGroup${i}_1" placeholder="0" inputmode="numeric" autocomplete="off" list="battGroupList" oninput="validateBattGroup(this)" onchange="validateBattGroup(this)"></div>
+        <div><label style="margin-top:0">Group 2</label><input id="battGroup${i}_2" placeholder="0" inputmode="numeric" autocomplete="off" list="battGroupList" oninput="validateBattGroup(this)" onchange="validateBattGroup(this)"></div>
+        <div><label style="margin-top:0">Group 3</label><input id="battGroup${i}_3" placeholder="0" inputmode="numeric" autocomplete="off" list="battGroupList" oninput="validateBattGroup(this)" onchange="validateBattGroup(this)"></div>
+        <div><label style="margin-top:0">Group 4</label><input id="battGroup${i}_4" placeholder="0" inputmode="numeric" autocomplete="off" list="battGroupList" oninput="validateBattGroup(this)" onchange="validateBattGroup(this)"></div>
+      </div>
+      <div class="field-note batt-group-note">Hanya boleh: 0, 100, 200, 300, 400, 500, 800. Selain itu tidak bisa disimpan.</div>
+    </div>`;
+  }
+  // init 1 baris baterai per rectifier per kategori
+  for(let i=1;i<=n;i++){ addBattSilent('battOk'+i); addBattSilent('battNok'+i); }
+  updateBattSum();
+}
+function battRowHTML(containerId){return `<div class="batt-row"><select>${BAT_OPTS.map(o=>`<option>${o}</option>`).join("")}</select><input type="number" value="1" min="0"><button type="button" class="btn btn-light" onclick="this.parentElement.remove();updateBattSum()">✕</button></div>`;}
+function addBattSilent(id){let el=document.getElementById(id); if(!el) return; if(el.children.length>=3) return; el.insertAdjacentHTML("beforeend",battRowHTML(id));}
+function addBatt(id){let el=document.getElementById(id);if(!el) return; if(el.children.length>=3){alert("Maksimal 3 jenis per kategori per Rectifier.");return;}el.insertAdjacentHTML("beforeend",battRowHTML(id));updateBattSum();}
+function battSummary(id){let el=document.getElementById(id); if(!el) return "-"; let rows=[...el.querySelectorAll(".batt-row")];let parts=rows.map(r=>{let sel=r.querySelector("select").value;let qty=r.querySelector("input").value||"0";return qty+"x "+sel;}).filter(s=>!s.startsWith("0x"));return parts.length?parts.join(" + "):"-";}
+function battTotal(id){let el=document.getElementById(id); if(!el) return 0; let rows=[...el.querySelectorAll(".batt-row")];let t=0;rows.forEach(r=>{t+=parseInt(r.querySelector("input").value||"0",10)||0;});return t;}
+function updateBattSumForRect(i){
+  let okT=battTotal("battOk"+i); let nokT=battTotal("battNok"+i);
+  let sumOk=document.getElementById("sumOk"+i); if(sumOk) sumOk.textContent="OK (Rect "+i+"): Total "+okT+" baterai - "+battSummary("battOk"+i)+"  →  Rect"+i+" Batt OK = "+okT;
+  let sumNok=document.getElementById("sumNok"+i); if(sumNok) sumNok.textContent="NOK (Rect "+i+"): Total "+nokT+" baterai - "+battSummary("battNok"+i)+"  →  Rect"+i+" Batt NOK = "+nokT;
+}
+function updateBattSum(){
+  let n=+document.getElementById("rectCount").value;
+  for(let i=1;i<=n;i++){ updateBattSumForRect(i); }
+  // jaga kompatibilitas: kalau ada elemen global lama, update juga
+  let gOk=document.getElementById("sumOk"); if(gOk && !document.getElementById("sumOk1")) gOk.textContent="OK: "+battSummary("battOk");
+  let gNok=document.getElementById("sumNok"); if(gNok && !document.getElementById("sumNok1")) gNok.textContent="NOK: "+battSummary("battNok");
+  updateRowPreview();
+}
+function updateRowPreview(){let d=collectAudit(false);let el=document.getElementById("rowPreview"); if(el) el.textContent=[d.tanggal,d.siteId,d.siteName,d.siteClass,d.cluster,d.kab,d.inputBy,"Rect:"+d.rectCount,"R1 OK:"+d.rect1?.jenisBattOK+" (Total "+d.rect1?.battOKTotal+")","R1 NOK:"+d.rect1?.jenisBattNOK+" (Total "+d.rect1?.battNOKTotal+")",d.mainpower,d.acpdb,d.genset,d.alarm,d.catatan].join(" | ");}
+function collectAudit(withDate){
+  let now=new Date();let tanggal=now.toISOString().slice(0,10)+" "+now.toTimeString().slice(0,8);
+  let n=+document.getElementById("rectCount").value;
+  function rectData(i){
+    return {
+      busVoltage: document.getElementById("rect"+i+"Volt")?.value||"",
+      loadCurrent: document.getElementById("rect"+i+"Amp")?.value||"",
+      jenisBattOK: battSummary("battOk"+i),
+      jenisBattNOK: battSummary("battNok"+i),
+      battOKTotal: battTotal("battOk"+i),
+      battNOKTotal: battTotal("battNok"+i),
+      batteryGroupConfig: getBattGroupConfigForRect(i),
+      battGroup1: document.getElementById("battGroup"+i+"_1")?.value||"",
+      battGroup2: document.getElementById("battGroup"+i+"_2")?.value||"",
+      battGroup3: document.getElementById("battGroup"+i+"_3")?.value||"",
+      battGroup4: document.getElementById("battGroup"+i+"_4")?.value||"",
+      // untuk Apps Script lama yang baca Rect1 Batt OK dll
+      battOk: battSummary("battOk"+i),
+      battNok: battSummary("battNok"+i)
+    };
+  }
+  let r1=rectData(1), r2=n>=2?rectData(2):{}, r3=n>=3?rectData(3):{};
+  // gabungan global untuk kompatibilitas
+  let allOk=[r1.jenisBattOK, r2.jenisBattOK||"", r3.jenisBattNOK||""].filter(x=>x && x!=="-").join(" | ");
+  let allNok=[r1.jenisBattNOK, r2.jenisBattNOK||"", r3.jenisBattNOK||""].filter(x=>x && x!=="-").join(" | ");
+  let totalOk=(r1.battOKTotal||0)+(r2.battOKTotal||0)+(r3.battOKTotal||0);
+  let totalNok=(r1.battNOKTotal||0)+(r2.battNOKTotal||0)+(r3.battNOKTotal||0);
+  return{tanggal: withDate? tanggal: new Date().toISOString().slice(0,10), siteId:document.getElementById("siteId").value.trim().toUpperCase(), siteName:document.getElementById("siteName").value, siteClass:document.getElementById("siteClass").value, class_:document.getElementById("siteClass").value, cluster:document.getElementById("cluster").value, kab:document.getElementById("kab").value, kabupaten:document.getElementById("kab").value, oba:document.getElementById("oba").value, inputBy:document.getElementById("pic").value, rectCount:document.getElementById("rectCount").value, jumlahRectifier:document.getElementById("rectCount").value, battOk: allOk||"-", battNok: allNok||"-", battOkTotal: totalOk, battNokTotal: totalNok, rect1BattOK: r1.battOKTotal, rect1BattNOK: r1.battNOKTotal, rect2BattOK: r2.battOKTotal||0, rect2BattNOK: r2.battNOKTotal||0, rect3BattOK: r3.battOKTotal||0, rect3BattNOK: r3.battNOKTotal||0, batteryGroupConfig: r1.batteryGroupConfig, battGroup1: r1.battGroup1, battGroup2: r1.battGroup2, battGroup3: r1.battGroup3, battGroup4: r1.battGroup4, rect1: r1, rect2: r2, rect3: r3, mainpower:document.getElementById("mainpower").value, acpdb:document.getElementById("acpdb").value, genset:document.getElementById("genset").value, alarm:document.getElementById("alarm").value, catatan:document.getElementById("catatan").value, fotoSebelum:document.getElementById("fotoSebelum").value, fotoProgress:document.getElementById("fotoProgress").value, fotoSesudah:document.getElementById("fotoSesudah").value};
+}
+function saveAudit(){let allowedG=["","0","100","200","300","400","500","800"];let bad=[];let nRect=+document.getElementById("rectCount").value;for(let i=1;i<=nRect;i++){for(let g=1;g<=4;g++){let el=document.getElementById("battGroup"+i+"_"+g);let v=el?.value||"";if(v!=="" && allowedG.indexOf(v)===-1) bad.push("Rect "+i+" Group "+g+" = "+v);}}if(bad.length){alert("Battery Group Config tidak valid!
+"+bad.join("
+")+"
+Hanya boleh: 0, 100, 200, 300, 400, 500, 800.");return;}let d=collectAudit(true);if(!d.siteId){alert("Isi Site ID dulu.");return;}audits.unshift(d);localStorage.setItem("moti_audits",JSON.stringify(audits));document.getElementById("syncTime").textContent=new Date().toLocaleString("id-ID");document.getElementById("saveMsg").innerHTML="<div class='success'>✓ BERHASIL - Data tersimpan di History app ini. Jika online, app juga mencoba kirim ke Apps Script TIDORE DATABASE. Jika belum masuk Sheet, pakai tombol Salin Baris di bawah.</div>";updateStats();renderHistory("");updateRowPreview();document.getElementById("saveMsg").innerHTML += "<div class='warn' style='margin-top:8px'>Cek di Sheet: buka tab <b>AUDIT</b> > scroll paling bawah. Kalau belum muncul dalam 5 detik, berarti Apps Script lama masih aktif — ganti dengan file FIXED di bawah.</div>";
 // try POST to Apps Script - no-cors, silent fail, never show 405 box
 try{let url=document.getElementById("appsUrl").value.trim()||APPS_URL_DEFAULT;fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)}).catch(()=>{});}catch(e){}}
 function copyRow(){let txt=document.getElementById("rowPreview").textContent;if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>alert("Baris disalin! Tempel di Sheet TIDORE DATABASE."));else{let ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();alert("Baris disalin!");}}
@@ -342,7 +538,7 @@ function renderInv(){document.getElementById("invList").innerHTML=invs.map(v=>`<
 (function(){
 let savedUrl=localStorage.getItem("moti_apps_url");if(savedUrl){document.getElementById("appsUrl").value=savedUrl;document.getElementById("activeUrl").textContent=savedUrl;}
 let dl=document.getElementById("siteList");dl.innerHTML=Object.keys(siteMap).map(k=>`<option value="${k}">`).join("");
-renderRect();addBatt("battOk");addBatt("battNok");document.getElementById("inputBy").value=document.getElementById("pic").value;
+renderRect();document.getElementById("inputBy").value=document.getElementById("pic").value;
 document.querySelectorAll("#battOk input, #battOk select, #battNok input, #battNok select").forEach(el=>el.addEventListener("change",updateBattSum));
 document.getElementById("catatan").addEventListener("input",updateRowPreview);
 updateStats();renderTasks();renderHistory("");renderInv();renderCheckin();updateBattSum();
