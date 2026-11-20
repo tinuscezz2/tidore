@@ -294,7 +294,7 @@ img{max-width:100%;height:auto}
     <label>Daya MainPower</label><input id="dayaMainpower" placeholder="Contoh: 11000" inputmode="decimal" autocomplete="off" oninput="cleanDaya(this)">
     <div class="field-note">Hanya angka & titik (.). Contoh: 11000</div>
     <label>Jumlah Phasa</label><input id="jumlahPhasa" placeholder="1 atau 3" inputmode="numeric" maxlength="1" autocomplete="off" oninput="cleanPhasa(this)" onchange="updatePhasa()">
-    <div class="field-note">Hanya boleh angka 1 atau 3. Jika ketik 1, Tegangan Antar Phasa tidak perlu tampil.</div>
+    <div class="field-note">Hanya boleh angka 1 atau 3. Jika ketik 1, Tegangan Antar Phasa Mainpower & ACPDB tidak tampil. GENSET TIDAK IKUT — Phase-N & Phase-Phase Genset selalu tampil 3 kotak, walau Phasa PLN = 1 maupun 3.</div>
     <label>Tegangan R-S-T terhadap N</label>
     <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
       <div><label style="margin-top:0">R - N</label><input id="tegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
@@ -366,8 +366,8 @@ img{max-width:100%;height:auto}
     <label>GENSET #1 Kapasitas (kVA)</label><input id="genset1Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
     <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
     <label>GENSET #1 Kondisi</label><select id="genset1Kondisi"><option>Normal</option><option>Rusak</option></select>
-    <label>GENSET #1 Tegangan Phase-N</label>
-    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+    <label id="genset1PhaseNLabel">GENSET #1 Tegangan Phase-N</label>
+    <div id="genset1PhaseNGrid" class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
       <div><label style="margin-top:0">R - N</label><input id="genset1TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset1TegSNBox"><label style="margin-top:0">S - N</label><input id="genset1TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset1TegTNBox"><label style="margin-top:0">T - N</label><input id="genset1TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
@@ -393,8 +393,8 @@ img{max-width:100%;height:auto}
     <label>GENSET #2 Kapasitas (kVA)</label><input id="genset2Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
     <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
     <label>GENSET #2 Kondisi</label><select id="genset2Kondisi"><option>Normal</option><option>Rusak</option></select>
-    <label>GENSET #2 Tegangan Phase-N</label>
-    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+    <label id="genset2PhaseNLabel">GENSET #2 Tegangan Phase-N</label>
+    <div id="genset2PhaseNGrid" class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
       <div><label style="margin-top:0">R - N</label><input id="genset2TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset2TegSNBox"><label style="margin-top:0">S - N</label><input id="genset2TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset2TegTNBox"><label style="margin-top:0">T - N</label><input id="genset2TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
@@ -420,8 +420,8 @@ img{max-width:100%;height:auto}
     <label>GENSET #3 Kapasitas (kVA)</label><input id="genset3Kapasitas" placeholder="Contoh: 100" inputmode="numeric" maxlength="3" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3)">
     <div class="field-note">Hanya angka, maks 3 digit. Contoh: 100</div>
     <label>GENSET #3 Kondisi</label><select id="genset3Kondisi"><option>Normal</option><option>Rusak</option></select>
-    <label>GENSET #3 Tegangan Phase-N</label>
-    <div class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
+    <label id="genset3PhaseNLabel">GENSET #3 Tegangan Phase-N</label>
+    <div id="genset3PhaseNGrid" class="grid2" style="grid-template-columns:1fr 1fr 1fr;gap:6px">
       <div><label style="margin-top:0">R - N</label><input id="genset3TegRN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset3TegSNBox"><label style="margin-top:0">S - N</label><input id="genset3TegSN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
       <div id="genset3TegTNBox"><label style="margin-top:0">T - N</label><input id="genset3TegTN" placeholder="220" inputmode="decimal" maxlength="5" autocomplete="off" oninput="cleanDC(this)"></div>
@@ -618,7 +618,31 @@ function updateSps(){var ada=(document.querySelector('input[name="adaSps"]:check
 function updateGensetAda(){var ada=(document.querySelector('input[name="adaGenset"]:checked')?.value||'Tidak')==='Ya';var wrap=document.getElementById('gensetDetailWrap');if(wrap)wrap.style.display=ada?'':'none';if(!ada){[1,2,3].forEach(function(n){var box=document.getElementById('genset'+n+'Box');if(box)box.style.display='none';['genset'+n+'Jenis','genset'+n+'Kapasitas','genset'+n+'TegRN','genset'+n+'TegSN','genset'+n+'TegTN','genset'+n+'TegRS','genset'+n+'TegST','genset'+n+'TegTR','genset'+n+'TegGN','genset'+n+'Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});});}else{updateGensetCount();}}
 function updateGensetCount(){var adaG=(document.querySelector('input[name="adaGenset"]:checked')?.value||'Tidak')==='Ya';var c=parseInt((document.querySelector('input[name="jumlahGenset"]:checked')?.value||'1'),10);if(isNaN(c))c=1;if(!adaG)c=0;[1,2,3].forEach(function(n){var box=document.getElementById('genset'+n+'Box');if(!box)return;var show=n<=c;box.style.display=show?'':'none';if(!show){['genset'+n+'Jenis','genset'+n+'Kapasitas','genset'+n+'Kondisi','genset'+n+'TegRN','genset'+n+'TegSN','genset'+n+'TegTN','genset'+n+'TegRS','genset'+n+'TegST','genset'+n+'TegTR','genset'+n+'TegGN','genset'+n+'Running','genset'+n+'Kerusakan'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=(id==='genset'+n+'Kondisi'?'Normal':(id==='genset'+n+'Running'?'Auto':''));});}});updatePhasa();}
 function cleanPhasa(el){el.value=(el.value||'').replace(/[^0-9]/g,'').slice(0,1);if(el.value!==''&&el.value!=='1'&&el.value!=='3'){el.value='';}updatePhasa();}
-function updatePhasa(){var v=document.getElementById('jumlahPhasa')?.value||'';var is1=(v==='1');var box=document.getElementById('antarPhasaBox');if(box)box.style.display=is1?'none':'';['tegSNBox','tegTNBox','arusSBox','arusTBox','acpdbTegSNBox','acpdbTegTNBox','acpdbArusSBox','acpdbArusTBox','genset1TegSNBox','genset1TegTNBox','genset2TegSNBox','genset2TegTNBox','genset3TegSNBox','genset3TegTNBox'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display=is1?'none':'';});var ab=document.getElementById('acpdbAntarPhasaBox');if(ab)ab.style.display=is1?'none':'';['genset1AntarPhasaBox','genset2AntarPhasaBox','genset3AntarPhasaBox'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display=is1?'none':'';});if(is1){['tegSN','tegTN','tegRS','tegST','tegTR','arusS','arusT','acpdbTegSN','acpdbTegTN','acpdbTegRS','acpdbTegST','acpdbTegTR','acpdbArusS','acpdbArusT','genset1TegSN','genset1TegTN','genset1TegRS','genset1TegST','genset1TegTR','genset2TegSN','genset2TegTN','genset2TegRS','genset2TegST','genset2TegTR','genset3TegSN','genset3TegTN','genset3TegRS','genset3TegST','genset3TegTR'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}}
+function updatePhasa(){var v=document.getElementById('jumlahPhasa')?.value||'';var is1=(v==='1');
+  // Mainpower (PLN) & ACPDB - IKUT Jumlah Phasa PLN
+  var box=document.getElementById('antarPhasaBox');if(box)box.style.display=is1?'none':'';
+  ['tegSNBox','tegTNBox','arusSBox','arusTBox','acpdbTegSNBox','acpdbTegTNBox','acpdbArusSBox','acpdbArusTBox'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display=is1?'none':'';});
+  var ab=document.getElementById('acpdbAntarPhasaBox');if(ab)ab.style.display=is1?'none':'';
+  if(is1){['tegSN','tegTN','tegRS','tegST','tegTR','arusS','arusT','acpdbTegSN','acpdbTegTN','acpdbTegRS','acpdbTegST','acpdbTegTR','acpdbArusS','acpdbArusT'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}
+  // GENSET #1/#2/#3 - TIDAK BOLEH MENGIKUTI PHASA PLN - SELALU TAMPIL 3 KOTAK
+  // Walau Jumlah Phasa PLN = 1 maupun 3, Phase-N tetap R-N / S-N / T-N (3 kotak),
+  // Phase-Phase tetap R-S / S-T / T-R (3 kotak). Jangan disembunyikan, jangan dikunci, jangan dikosongkan.
+  for(var gi=1;gi<=3;gi++){
+    var snBox=document.getElementById('genset'+gi+'TegSNBox');
+    var tnBox=document.getElementById('genset'+gi+'TegTNBox');
+    if(snBox)snBox.style.display='';
+    if(tnBox)tnBox.style.display='';
+    var grid=document.getElementById('genset'+gi+'PhaseNGrid');
+    if(grid)grid.style.gridTemplateColumns='1fr 1fr 1fr';
+    var label=document.getElementById('genset'+gi+'PhaseNLabel');
+    if(label)label.textContent='GENSET #'+gi+' Tegangan Phase-N';
+    var antar=document.getElementById('genset'+gi+'AntarPhasaBox');
+    if(antar)antar.style.display='';
+    ['TegSN','TegTN','TegRS','TegST','TegTR','TegRN'].forEach(function(suf){
+      var e=document.getElementById('genset'+gi+suf);
+      if(e)e.disabled=false;
+    });
+  }}
 function cleanModul(el){el.value=(el.value||"").replace(/[^0-9]/g,"").slice(0,1);el.style.borderColor="#ddd";}
 function validateBattGroup(el){
   var allowed=["0","100","200","300","400","500","800"];
@@ -806,7 +830,7 @@ function renderInv(){document.getElementById("invList").innerHTML=invs.map(v=>`<
 (function(){
 let savedUrl=localStorage.getItem("moti_apps_url");if(savedUrl){document.getElementById("appsUrl").value=savedUrl;document.getElementById("activeUrl").textContent=savedUrl;}
 renderSiteOptions();refreshSiteList();
-renderRect();document.getElementById("inputBy").value=document.getElementById("pic").value;
+renderRect();updatePhasa();document.getElementById("inputBy").value=document.getElementById("pic").value;
 document.querySelectorAll("#battOk input, #battOk select, #battNok input, #battNok select").forEach(el=>el.addEventListener("change",updateBattSum));
 document.getElementById("catatan").addEventListener("input",updateRowPreview);
 updateStats();renderTasks();renderHistory("");renderInv();renderCheckin();updateBattSum();
