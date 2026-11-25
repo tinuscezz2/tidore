@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --navy:#7A0000;
+  --navy-2:#B3001B;
+  --accent:#E60000;
+  --accent-soft:#FFE8E8;
+  --green:#16A34A;
+  --amber:#FFC107;
+  --red:#E60000;
+  --bg:#f6f6f7;
+  --surface:#FFFFFF;
+  --text:#1A1A1A;
+  --muted:#667085;
+  --line:#E4E7EC;
+  --telkomsel:#E60000;
+  --telkomsel-highlight:#FF6B6B;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#f6f6f7;
+    --surface:#FFFFFF;
+    --text:#1A1A1A;
+    --muted:#667085;
+    --line:#E4E7EC;
+  }
+}
+*{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:#f6f6f7}
+input,select,textarea{font-family:inherit}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{scrollbar-width:none}
+.range{accent-color:var(--accent)}
+.telkomsel-gradient{background:#E60000;color:#fff}
+.telkomsel-gradient-soft{background:#E60000;color:#fff}
+.telkomsel-header{background:linear-gradient(135deg,#FF0000 0%,#FF6A00 45%,#7A0000 100%);color:#fff}
+.telkomsel-hero{background:linear-gradient(135deg,#FF0000 0%,#FF6A00 45%,#7A0000 100%);color:#fff}
+.moti-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.moti-input{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px}
